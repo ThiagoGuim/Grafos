@@ -1,0 +1,36 @@
+# depslib dependency file v1.0
+1536786635 source:c:\devjogos\project\lista\main.cpp
+	<iostream>
+	<fstream>
+	<cstring>
+	"GrafoL.h"
+
+1536442305 source:c:\devjogos\project\lista\vertice.cpp
+	"Vertice.h"
+	<iostream>
+
+1536441861 c:\devjogos\project\lista\vertice.h
+	"Aresta.h"
+
+1536381673 c:\devjogos\project\lista\aresta.h
+
+1536381673 source:c:\devjogos\project\lista\aresta.cpp
+	"Aresta.h"
+	<iostream>
+
+1535321819 source:c:\devjogos\project\lista\lista.cpp
+
+1536007109 source:c:\devjogos\project\lista\listae.cpp
+	"ListaE.h"
+	<iostream>
+
+1536006443 c:\devjogos\project\lista\listae.h
+	"Aresta.h"
+
+1536787609 source:c:\devjogos\project\lista\grafol.cpp
+	"GrafoL.h"
+	<iostream>
+
+1536786926 c:\devjogos\project\lista\grafol.h
+	"Vertice.h"
+
