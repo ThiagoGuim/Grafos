@@ -1,0 +1,14 @@
+->inicializa todos os vertices como desmarcados.
+
+->inicializa o vetor de cores com 0(sem cor).
+
+->Se o vertice nao foi visitado ainda,visitamos e colorimos.
+
+->Utilizamos o DFS para fazer as buscas.
+
+->Se o vertice correspondente à informacao da aresta for != NULL e vetor de cores do indice do vertice == 0, seta para uma cor diferente do vertice que ele esta ligado.
+
+->Se nao, se o vetor de cores do indice desse vertice != 0 e == à cor do 
+vertice que ele esta ligado , return false.
+
+->Se nao, se o  vetor de cores do indice desse vertice != 0 e != da cor do vertice que ele esta ligado continua.   
