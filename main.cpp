@@ -5,6 +5,14 @@
 
 using namespace std;
 
+    ///Grupo 3
+
+    ///Antônio Henrique Passamai Penizollo 201776041
+    ///Braulio Silva Mendes Lucas 201776011
+    ///João Victor Dutra Balboa 201776035
+    ///Marcus Vinícius Vasconcelos de Almeida Cunha 201776013
+    ///Thiago Teixeira Guimarães 201765061A
+
 GrafoL* lerArquivo(char *nomeArq,GrafoL* grafo){
 
     FILE* arq;
@@ -77,23 +85,25 @@ GrafoL* lerArquivo(char *nomeArq,GrafoL* grafo){
 }
 
 
-int main( /*int argc, char *argv[]*/ )
+int main( int argc, char *argv[])
 {
     string nomeArquivo;
     GrafoL* grafo = new GrafoL();
 
-    cout << "Informe o nome do arquivo que deseja abrir : ";
+    /*cout << "Informe o nome do arquivo que deseja abrir : ";
     cin >> nomeArquivo;
 
     char *nomeArq = new char[nomeArquivo.length() + 1];              //Formata o nome de arquivo para os metodos
     memcpy(nomeArq, nomeArquivo.c_str(), nomeArquivo.length() + 1);  //das funçoes abrirem direito.*/
 
-    grafo = lerArquivo(nomeArq/*argv[1]*/, grafo);
+    grafo = lerArquivo(argv[1], grafo);
 
     if(grafo != NULL){
+
+        int terminais[3] = {2,4,3};
+
         grafo->imprimeArestas();
-        grafo->fechoTransitivoDireto(4);
-        grafo->fechoTransitivoIndireto(5);
+        grafo->steinerGuloso(terminais,3);
     }
 
     return 0;

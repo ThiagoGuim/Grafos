@@ -6,7 +6,7 @@
 class Vertice{
 
 private:
-    int info;
+    int id;
     Aresta* primeiro; //cabeça da lista de arestas
     Vertice* prox;
     int degree;
@@ -25,18 +25,18 @@ public:
     void decreaseDegree();
     void decreaseInDegree();
     void decreaseOutDegree();
-    int getInfo();
-    void setInfo(int info);
+    int getId();
+    void setId(int id);
     Vertice* getProx();
     void setProx(Vertice *p);
     Aresta* getArestas(); //retorna a cabeça da lista
     void setArestas(Aresta* arestas); //define a cabeça da lista
-    void insereAresta(int vert2, Aresta* a);
-    void insereAresta(int vert, Aresta* a, int peso);
-    void insereArco(int vert2, Aresta* a);
-    void insereArco(int vert, Aresta* a, int peso);
-    void retiraAresta(int vert2);
-    void retiraArco(int vert2);
+    void insereAresta(int vert, Aresta* a); //insere a aresta com a outra extremidade em a->getId
+    void insereAresta(int vert, Aresta* a, int peso); //insere a aresta com o peso
+    void insereArco(int vert2, Aresta* a); //insere arco que tem como cabeça a->getId
+    void insereArco(int vert, Aresta* a, int peso); //insere arco com peso
+    void retiraAresta(int vert);//retira aresta com o vertice vert
+    void retiraArco(int vert);//retira arco que tem como cabeça vert
     void imprime();
 
 };

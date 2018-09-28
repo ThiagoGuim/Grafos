@@ -38,7 +38,6 @@
 		<Unit filename="Fila.h" />
 		<Unit filename="GrafoL.cpp" />
 		<Unit filename="GrafoL.h" />
-		<Unit filename="ListaE.cpp" />
 		<Unit filename="ListaE.h" />
 		<Unit filename="Vertice.cpp" />
 		<Unit filename="Vertice.h" />

@@ -23,15 +23,15 @@ Fila::~Fila()
 int Fila::getInicio()
 {
     if(c != NULL)
-        return c->getInfo();
+        return c->getId();
         else
             cout << "ERRO";
 }
 
-void Fila::enfileira(int info)
+void Fila::enfileira(int id)
 {
     Vertice* p = new Vertice();
-    p->setInfo(info);
+    p->setId(id);
     p->setProx(NULL);
 
     if(f == NULL)
@@ -53,7 +53,7 @@ int Fila::desenfileira()
         if(c == NULL)
             f = NULL;
 
-        int val = p->getInfo();
+        int val = p->getId();
         delete p;
         return val;
     }

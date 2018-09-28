@@ -1,20 +1,20 @@
 # depslib dependency file v1.0
-1537827659 source:c:\devjogos\project\lista\main.cpp
+1538176079 source:c:\devjogos\project\lista\main.cpp
 	<iostream>
 	<fstream>
 	<cstring>
 	"GrafoL.h"
 
-1537815348 source:c:\devjogos\project\lista\vertice.cpp
+1538172611 source:c:\devjogos\project\lista\vertice.cpp
 	"Vertice.h"
 	<iostream>
 
-1537815344 c:\devjogos\project\lista\vertice.h
+1538171755 c:\devjogos\project\lista\vertice.h
 	"Aresta.h"
 
-1536381673 c:\devjogos\project\lista\aresta.h
+1538171215 c:\devjogos\project\lista\aresta.h
 
-1536381673 source:c:\devjogos\project\lista\aresta.cpp
+1538171215 source:c:\devjogos\project\lista\aresta.cpp
 	"Aresta.h"
 	<iostream>
 
@@ -27,12 +27,13 @@
 1536006443 c:\devjogos\project\lista\listae.h
 	"Aresta.h"
 
-1537835480 source:c:\devjogos\project\lista\grafol.cpp
+1538177454 source:c:\devjogos\project\lista\grafol.cpp
 	"GrafoL.h"
 	"Fila.h"
+	"limits.h"
 	<iostream>
 
-1537825913 c:\devjogos\project\lista\grafol.h
+1538175694 c:\devjogos\project\lista\grafol.h
 	"Vertice.h"
 
 1537048572 source:c:\devjogos\project\lista\vetordemarcacao.cpp
@@ -40,7 +41,7 @@
 
 1537048618 c:\devjogos\project\lista\vetordemarcacao.h
 
-1537827634 source:c:\devjogos\project\lista\fila.cpp
+1538171240 source:c:\devjogos\project\lista\fila.cpp
 	<iostream>
 	"Fila.h"
 

@@ -7,12 +7,12 @@ Aresta::Aresta(){}
 
 Aresta::~Aresta(){}
 
-int Aresta::getInfo(){
-    return info;
+int Aresta::getId(){
+    return id;
 }
 
-void Aresta::setInfo(int info){
-    this->info = info;
+void Aresta::setId(int id){
+    this->id = id;
 }
 
 Aresta* Aresta::getProx(){

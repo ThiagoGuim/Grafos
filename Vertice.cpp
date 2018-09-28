@@ -5,9 +5,9 @@ using namespace std;
 
 Vertice::Vertice(){
 
-    int degree = 0;
-    int inDegree = 0;
-    int outDegree = 0;
+    degree = 0;
+    inDegree = 0;
+    outDegree = 0;
     primeiro = NULL;
 
 }
@@ -23,12 +23,13 @@ Vertice::~Vertice(){
     }
 }
 
-int Vertice::getInfo(){
-    return info;
+int Vertice::getId(){
+
+    return id;
 }
 
-void Vertice::setInfo(int info){
-    this->info = info;
+void Vertice::setId(int id){
+    this->id = id;
 }
 
 Vertice* Vertice::getProx(){
@@ -53,11 +54,11 @@ void Vertice::insereAresta(int vert, Aresta* a){
 
     if(primeiro == NULL){
         primeiro = a;
-        a->setInfo(vert);
+        a->setId(vert);
         a->setProx(NULL);
     }else{
         primeiro = a;
-        a->setInfo(vert);
+        a->setId(vert);
         a->setProx(p);
     }
 
@@ -70,15 +71,13 @@ void Vertice::insereArco(int vert, Aresta* a){
 
     if(primeiro == NULL){
         primeiro = a;
-        a->setInfo(vert);
+        a->setId(vert);
         a->setProx(NULL);
     }else{
         primeiro = a;
-        a->setInfo(vert);
+        a->setId(vert);
         a->setProx(p);
     }
-
-    increaseOutDegree();
 }
 
 void Vertice::insereAresta(int vert, Aresta* a, int peso){
@@ -88,16 +87,14 @@ void Vertice::insereAresta(int vert, Aresta* a, int peso){
     if(primeiro == NULL){
         primeiro = a;
         a->setPeso(peso);
-        a->setInfo(vert);
+        a->setId(vert);
         a->setProx(NULL);
     }else{
         primeiro = a;
         a->setPeso(peso);
-        a->setInfo(vert);
+        a->setId(vert);
         a->setProx(p);
     }
-
-    increaseDegree();
 }
 
 void Vertice::insereArco(int vert, Aresta* a, int peso){
@@ -107,12 +104,12 @@ void Vertice::insereArco(int vert, Aresta* a, int peso){
     if(primeiro == NULL){
         primeiro = a;
         a->setPeso(peso);
-        a->setInfo(vert);
+        a->setId(vert);
         a->setProx(NULL);
     }else{
         primeiro = a;
         a->setPeso(peso);
-        a->setInfo(vert);
+        a->setId(vert);
         a->setProx(p);
     }
 
@@ -125,12 +122,12 @@ void Vertice::retiraAresta(int vert2)
     Aresta* aux = NULL;
 
     if(p == NULL){
-        cout << "Aresta inexistente ! vertice " << info << "nao possui nenhuma aresta !" ;
+        cout << "Aresta inexistente ! vertice " << id << "nao possui nenhuma aresta !" ;
     }
 
 
     while(p != NULL){
-        if(p->getInfo() == vert2)
+        if(p->getId() == vert2)
             break;
         aux = p;
         p = p->getProx();
@@ -153,11 +150,11 @@ void Vertice::retiraArco(int vert2)
     Aresta* aux = NULL;
 
     if(p == NULL){
-        cout << "Aresta inexistente ! vertice " << info << "nao possui nenhuma aresta !" ;
+        cout << "Arco inexistente ! vertice " << id << "nao possui nenhum arco !" ;
     }
 
     while(p != NULL){
-        if(p->getInfo() == vert2)
+        if(p->getId() == vert2)
             break;
         aux = p;
         p = p->getProx();
@@ -179,26 +176,13 @@ void Vertice::imprime(){
     Aresta *p = primeiro;
 
     while(p != NULL){
-        cout << p->getInfo() << " ";
+        cout << p->getId() << " ";
         p = p->getProx();
     }
 }
 
 int Vertice::getDegree(){
 
-    /*Aresta *p = primeiro;
-    int grau = 0;
-
-    if(p == NULL)
-        return grau;
-        else{
-            while(p != NULL){
-                grau++;
-                p = p->getProx();
-            }
-            return grau;
-        }
-    */
     return degree;
 }
 

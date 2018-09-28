@@ -4,15 +4,15 @@
 class Aresta{
 
 private:
-    int info;
+    int id;
     int peso;
     Aresta* prox;
 
 public:
     Aresta();
     ~Aresta();
-    int getInfo();
-    void setInfo(int info);
+    int getId();
+    void setId(int id);
     Aresta* getProx();
     void setProx(Aresta *p);
     int getPeso();
