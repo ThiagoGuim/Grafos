@@ -46,19 +46,19 @@ GrafoL* lerArquivo(char *nomeArq,GrafoL* grafo){
 
     bool ehDirecionado;
     cout << "Eh direcionado ?" << endl;
-    cin >> ehDirecionado;
+    //cin >> ehDirecionado;
 
-    grafo->setDirecionado(ehDirecionado);
+    grafo->setDirecionado(0);//ehDirecionado);
 
     for(int i = 1;i <= linhas;i++){
         if(i == 1){
             fscanf(arq, "%d\n", &numVertices);
-            printf("%d\n", numVertices);        // pegando a primeira linha e vendo a quantidade de vertices.
+            //printf("%d\n", numVertices);        // pegando a primeira linha e vendo a quantidade de vertices.
 
         }else{
             if(flag == 1){
                 if(fscanf(arq, "%d %d\n", &vert1, &vert2) != EOF){
-                    printf("%d %d\n", vert1, vert2);
+                    //printf("%d %d\n", vert1, vert2);
                     grafo->insereVertice(vert1);       // insere o vertice correspondente no arquivo.
                     grafo->insereVertice(vert2);       // insere o vertice correspondente no arquivo.
                     if(!ehDirecionado)
@@ -68,7 +68,7 @@ GrafoL* lerArquivo(char *nomeArq,GrafoL* grafo){
                 }
             }else{
                 if(fscanf(arq, "%d %d %d\n", &vert1, &vert2, &peso) != EOF){
-                    printf("%d %d %d\n", vert1, vert2, peso);
+                    //printf("%d %d %d\n", vert1, vert2, peso);
                     grafo->insereVertice(vert1);             // insere o vertice correspondente no arquivo.
                     grafo->insereVertice(vert2);             // insere o vertice correspondente no arquivo.
                     if(!ehDirecionado)
@@ -85,7 +85,7 @@ GrafoL* lerArquivo(char *nomeArq,GrafoL* grafo){
 }
 
 
-int main( int argc, char *argv[])
+int main( /*int argc, char *argv[]*/)
 {
     string nomeArquivo;
     GrafoL* grafo = new GrafoL();
@@ -96,14 +96,15 @@ int main( int argc, char *argv[])
     char *nomeArq = new char[nomeArquivo.length() + 1];              //Formata o nome de arquivo para os metodos
     memcpy(nomeArq, nomeArquivo.c_str(), nomeArquivo.length() + 1);  //das funçoes abrirem direito.*/
 
-    grafo = lerArquivo(argv[1], grafo);
+    grafo = lerArquivo("grafo_209.txt", grafo);
 
     if(grafo != NULL){
 
-        int terminais[3] = {2,4,3};
+        int terminais[21] = {178, 203, 180, 81, 116, 165, 28, 4 , 40, 93, 65, 133, 27, 195, 192, 194, 99, 196, 110, 131, 104};
 
-        grafo->imprimeArestas();
-        grafo->steinerGuloso(terminais,3);
+        //grafo->imprimeArestas();
+        grafo->steinerGuloso(terminais, 21);
+
     }
 
     return 0;

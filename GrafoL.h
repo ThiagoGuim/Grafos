@@ -1,6 +1,9 @@
 #ifndef GRAFOL_H_INCLUDED
 #define GRAFOL_H_INCLUDED
 #include "Vertice.h"
+#include "VerticeSolucao.h"
+#include "ArestaSolucao.h"
+#include "ListaVerticeSolucao.h"
 
 class GrafoL{
 
@@ -47,9 +50,33 @@ public:
     void retiraVertice(int vert);//remove o vertice vert
     void retiraAresta(int vert1, int vert2);//remove aresta entre o vert1 e vert2
     void retiraArco(int vert1, int vert2);//remove arco de vert1 para vert2
+
+    int retornaIndice(int* vet, int tam, int id);
+    int retornaIndice(int* vet, int tam, int id, GrafoL* newGrafo);
+    int retornaVerticeDoVetor(int i);
+    int retornaVerticeDoVetor(int i, GrafoL* newGrafo);
+
+    GrafoL* subgrafoInduzido(int * vet, int tam);
+    int numVizinhosTerminais(Vertice* p, int *terminais, int tam);
+    void atribuiRank(ListaVerticeSolucao* listaDeCandidatos, int* terminais, int tam, GrafoL* grafoAux);
+    void auxOrdenaListaCandidatos(VerticeSolucao* vetorAux, int inicio, int fim);
+    void ordenaListaDeCandidatos(ListaVerticeSolucao* listaDeCandidatos, int inicio, int fim);
+    float normaliza(float valor);
+    GrafoL* montaArvore(GrafoL* newGrafo, int* numComponentesConexas);
+    GrafoL* podaGrafo(GrafoL* newGrafo, int* terminais, int tam);
     void steinerGuloso(int* terminais, int tam);//algoritmo guloso para o problema da arvore de steiner,recebe os terminais atraves de um vetor pela main
     bool verificaSePodeSolucao(Vertice* p,int* vetorSolucao);//verifica se o vertice p pode entrar na solucao
     bool verificaSeEhTerminal(Vertice *p, int *terminais,int tam);//verifica se eh um terminal do problema da arvore de steiner
+    GrafoL* copiaGrafo();
+
+    GrafoL* kruskal();
+    int buscaArvore(int id, int* arvores);
+    int buscaArvore(int id, int* arvores, GrafoL* newGrafo);
+    void uneArvores(int id, int id2, int* arvores);
+    void uneArvores(int id, int id2, int* arvores, GrafoL* newGrafo);
+    void ordenaArestas(ArestaSolucao listaDeArestas[], int inicio, int fim);
+    bool veSeJaTemArestaSolucao(ArestaSolucao listaDeArestas[], int id, int id2);
+    bool veSeJaTemArestaSolucao(ArestaSolucao listaDeArestas[], int id, int id2, int tam);
     void imprimeVertices();
     void imprimeArestas();
     void quickSort(int vetorGraus[], int inicio, int fim);//para poder ordenar alguns vetores

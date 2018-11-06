@@ -1,20 +1,20 @@
 # depslib dependency file v1.0
-1538176079 source:c:\devjogos\project\lista\main.cpp
+1541464563 source:c:\devjogos\project\lista\main.cpp
 	<iostream>
 	<fstream>
 	<cstring>
 	"GrafoL.h"
 
-1538172611 source:c:\devjogos\project\lista\vertice.cpp
+1538176211 source:c:\devjogos\project\lista\vertice.cpp
 	"Vertice.h"
 	<iostream>
 
-1538171755 c:\devjogos\project\lista\vertice.h
+1539972829 c:\devjogos\project\lista\vertice.h
 	"Aresta.h"
 
-1538171215 c:\devjogos\project\lista\aresta.h
+1539028513 c:\devjogos\project\lista\aresta.h
 
-1538171215 source:c:\devjogos\project\lista\aresta.cpp
+1538174815 source:c:\devjogos\project\lista\aresta.cpp
 	"Aresta.h"
 	<iostream>
 
@@ -27,24 +27,58 @@
 1536006443 c:\devjogos\project\lista\listae.h
 	"Aresta.h"
 
-1538177454 source:c:\devjogos\project\lista\grafol.cpp
+1541464480 source:c:\devjogos\project\lista\grafol.cpp
 	"GrafoL.h"
 	"Fila.h"
 	"limits.h"
+	"ListaArestaSolucao.h"
+	"ListaVerticeSolucao.h"
+	"ArestaSolucao.h"
+	"VerticeSolucao.h"
 	<iostream>
 
-1538175694 c:\devjogos\project\lista\grafol.h
+1540084832 c:\devjogos\project\lista\grafol.h
 	"Vertice.h"
+	"VerticeSolucao.h"
+	"ArestaSolucao.h"
+	"ListaVerticeSolucao.h"
 
 1537048572 source:c:\devjogos\project\lista\vetordemarcacao.cpp
 	"vetorDeMarcacao.h"
 
 1537048618 c:\devjogos\project\lista\vetordemarcacao.h
 
-1538171240 source:c:\devjogos\project\lista\fila.cpp
+1538174840 source:c:\devjogos\project\lista\fila.cpp
 	<iostream>
 	"Fila.h"
 
-1537827634 c:\devjogos\project\lista\fila.h
+1537831234 c:\devjogos\project\lista\fila.h
 	"Vertice.h"
+
+1539288905 c:\devjogos\project\lista\verticesolucao.h
+
+1539286476 source:c:\devjogos\project\lista\verticesolucao.cpp
+	<iostream>
+	"VerticeSolucao.h"
+
+1539286127 source:c:\devjogos\project\lista\arestasolucao.cpp
+	"ArestaSolucao.h"
+
+1539286123 c:\devjogos\project\lista\arestasolucao.h
+
+1539286144 c:\devjogos\project\lista\listaarestasolucao.h
+	"ArestaSolucao.h"
+
+1539286139 source:c:\devjogos\project\lista\listaarestasolucao.cpp
+	"ArestaSolucao.h"
+	"ListaArestaSolucao.h"
+	<iostream>
+
+1540059288 source:c:\devjogos\project\lista\listaverticesolucao.cpp
+	"VerticeSolucao.h"
+	"ListaVerticeSolucao.h"
+	<iostream>
+
+1540004585 c:\devjogos\project\lista\listaverticesolucao.h
+	"VerticeSolucao.h"
 

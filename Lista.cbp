@@ -34,13 +34,20 @@
 		</Compiler>
 		<Unit filename="Aresta.cpp" />
 		<Unit filename="Aresta.h" />
+		<Unit filename="ArestaSolucao.cpp" />
+		<Unit filename="ArestaSolucao.h" />
 		<Unit filename="Fila.cpp" />
 		<Unit filename="Fila.h" />
 		<Unit filename="GrafoL.cpp" />
 		<Unit filename="GrafoL.h" />
-		<Unit filename="ListaE.h" />
+		<Unit filename="ListaArestaSolucao.cpp" />
+		<Unit filename="ListaArestaSolucao.h" />
+		<Unit filename="ListaVerticeSolucao.cpp" />
+		<Unit filename="ListaVerticeSolucao.h" />
 		<Unit filename="Vertice.cpp" />
 		<Unit filename="Vertice.h" />
+		<Unit filename="VerticeSolucao.cpp" />
+		<Unit filename="VerticeSolucao.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
