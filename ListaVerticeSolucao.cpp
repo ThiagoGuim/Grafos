@@ -76,13 +76,12 @@ VerticeSolucao* ListaVerticeSolucao::buscaVerticeSolucao(int id){
     VerticeSolucao* p = primeiro;
 
     while(p != NULL){
-        if( p->getId() == id)
+        if(p->getId() == id)
             return p;
         p = p->getProx();
     }
 
     return p;
-
 }
 
 
@@ -115,3 +114,60 @@ int ListaVerticeSolucao::getTamanho(){
 
     return tamanho;
 }
+
+VerticeSolucao* ListaVerticeSolucao::removeVerticeDaPosicao(int posicao){
+
+    VerticeSolucao* p = primeiro;
+    VerticeSolucao* aux = NULL;
+    int cont = 0;
+
+
+    while(p != NULL){
+        if(cont == posicao)
+            break;
+        aux = p;
+        p = p->getProx();
+        cont++;
+    }
+
+    if(aux == NULL){
+        primeiro = primeiro->getProx();
+        delete p;
+        tamanho--;
+    }else{
+        aux->setProx(p->getProx());
+        delete p;
+        tamanho--;
+    }
+
+}
+
+VerticeSolucao* ListaVerticeSolucao::getPosicaoEscolhida(int posicao){
+
+    VerticeSolucao* p = primeiro;
+    int cont = 0;
+
+    while(p != NULL){
+        if(cont == posicao)
+            break;
+        p = p->getProx();
+        cont++;
+    }
+
+    return p;
+}
+
+void ListaVerticeSolucao::removeTudo(){
+
+    VerticeSolucao* p = primeiro;
+    VerticeSolucao* aux = NULL;
+
+    while (p != NULL){
+        aux = p;
+        p = p->getProx();
+        delete aux;
+    }
+    primeiro = NULL;
+    tamanho = 0;
+}
+

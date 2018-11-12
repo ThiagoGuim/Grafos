@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1541464563 source:c:\devjogos\project\lista\main.cpp
+1541811724 source:c:\devjogos\project\lista\main.cpp
 	<iostream>
 	<fstream>
 	<cstring>
@@ -27,7 +27,7 @@
 1536006443 c:\devjogos\project\lista\listae.h
 	"Aresta.h"
 
-1541464480 source:c:\devjogos\project\lista\grafol.cpp
+1541811485 source:c:\devjogos\project\lista\grafol.cpp
 	"GrafoL.h"
 	"Fila.h"
 	"limits.h"
@@ -36,8 +36,10 @@
 	"ArestaSolucao.h"
 	"VerticeSolucao.h"
 	<iostream>
+	<stdlib.h>
+	<time.h>
 
-1540084832 c:\devjogos\project\lista\grafol.h
+1541807438 c:\devjogos\project\lista\grafol.h
 	"Vertice.h"
 	"VerticeSolucao.h"
 	"ArestaSolucao.h"
@@ -57,7 +59,7 @@
 
 1539288905 c:\devjogos\project\lista\verticesolucao.h
 
-1539286476 source:c:\devjogos\project\lista\verticesolucao.cpp
+1541549548 source:c:\devjogos\project\lista\verticesolucao.cpp
 	<iostream>
 	"VerticeSolucao.h"
 
@@ -69,16 +71,16 @@
 1539286144 c:\devjogos\project\lista\listaarestasolucao.h
 	"ArestaSolucao.h"
 
-1539286139 source:c:\devjogos\project\lista\listaarestasolucao.cpp
+1541808043 source:c:\devjogos\project\lista\listaarestasolucao.cpp
 	"ArestaSolucao.h"
 	"ListaArestaSolucao.h"
 	<iostream>
 
-1540059288 source:c:\devjogos\project\lista\listaverticesolucao.cpp
+1541622233 source:c:\devjogos\project\lista\listaverticesolucao.cpp
 	"VerticeSolucao.h"
 	"ListaVerticeSolucao.h"
 	<iostream>
 
-1540004585 c:\devjogos\project\lista\listaverticesolucao.h
+1541546105 c:\devjogos\project\lista\listaverticesolucao.h
 	"VerticeSolucao.h"
 

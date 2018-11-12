@@ -46,9 +46,9 @@ GrafoL* lerArquivo(char *nomeArq,GrafoL* grafo){
 
     bool ehDirecionado;
     cout << "Eh direcionado ?" << endl;
-    //cin >> ehDirecionado;
+    cin >> ehDirecionado;
 
-    grafo->setDirecionado(0);//ehDirecionado);
+    grafo->setDirecionado(ehDirecionado);//ehDirecionado);
 
     for(int i = 1;i <= linhas;i++){
         if(i == 1){
@@ -73,6 +73,7 @@ GrafoL* lerArquivo(char *nomeArq,GrafoL* grafo){
                     grafo->insereVertice(vert2);             // insere o vertice correspondente no arquivo.
                     if(!ehDirecionado)
                         grafo->insereAresta(vert1, vert2, peso); // insere a aresta correspondente no arquivo ou o arco
+
                         else
                             grafo->insereArco(vert1, vert2, peso);
                 }
@@ -96,14 +97,19 @@ int main( /*int argc, char *argv[]*/)
     char *nomeArq = new char[nomeArquivo.length() + 1];              //Formata o nome de arquivo para os metodos
     memcpy(nomeArq, nomeArquivo.c_str(), nomeArquivo.length() + 1);  //das funçoes abrirem direito.*/
 
-    grafo = lerArquivo("grafo_209.txt", grafo);
+    grafo = lerArquivo("teste.txt", grafo);
 
     if(grafo != NULL){
 
-        int terminais[21] = {178, 203, 180, 81, 116, 165, 28, 4 , 40, 93, 65, 133, 27, 195, 192, 194, 99, 196, 110, 131, 104};
-
+        //int terminais[14] = {797, 465, 968, 563, 209, 64, 241, 898, 771,835, 861, 102, 99, 321};
+        //int terminais[14] = {30, 180, 81, 116, 132, 196, 88, 17, 191, 161, 19, 201, 144, 178};
+        //int terminais[14] = {4332, 7142, 2383, 3417, 7496, 7022, 4210, 1696, 622,6767, 2822, 3184, 980, 6131};
+        //int terminais[2] = {7, 6};
         //grafo->imprimeArestas();
-        grafo->steinerGuloso(terminais, 21);
+        //grafo->steinerGuloso(terminais, 14);
+        grafo->kruskal();
+        //grafo->steinerGulosoRandomizado(terminais, 5, 0.3, 10);
+
 
     }
 

@@ -16,8 +16,11 @@ public:
 
     void insereVertice(VerticeSolucao* a);
     void insereVertice(int id);
+    void removeTudo();
     VerticeSolucao* removeVertice();
+    VerticeSolucao* removeVerticeDaPosicao(int posicao);
     VerticeSolucao* getPrimeiro();
+    VerticeSolucao* getPosicaoEscolhida(int posicao);
     bool vazia();
     void imprime();
     int getTamanho();

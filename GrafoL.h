@@ -64,12 +64,18 @@ public:
     float normaliza(float valor);
     GrafoL* montaArvore(GrafoL* newGrafo, int* numComponentesConexas);
     GrafoL* podaGrafo(GrafoL* newGrafo, int* terminais, int tam);
-    void steinerGuloso(int* terminais, int tam);//algoritmo guloso para o problema da arvore de steiner,recebe os terminais atraves de um vetor pela main
+    GrafoL* steinerGuloso(int* terminais, int tam);//algoritmo guloso para o problema da arvore de steiner,recebe os terminais atraves de um vetor pela main
+    void steinerGulosoRandomizado(int* terminais, int tam, float alfa, int numeroSolucoes);
     bool verificaSePodeSolucao(Vertice* p,int* vetorSolucao);//verifica se o vertice p pode entrar na solucao
     bool verificaSeEhTerminal(Vertice *p, int *terminais,int tam);//verifica se eh um terminal do problema da arvore de steiner
+    void preencheListaDeCandidatos(ListaVerticeSolucao* listaDeCandidatos, int* terminais,  int tam);
     GrafoL* copiaGrafo();
+    float pesoDaArvore();
 
+
+    int* djisktra(int part);
     GrafoL* kruskal();
+    GrafoL* kruskal(int* numComponentesConexas);
     int buscaArvore(int id, int* arvores);
     int buscaArvore(int id, int* arvores, GrafoL* newGrafo);
     void uneArvores(int id, int id2, int* arvores);

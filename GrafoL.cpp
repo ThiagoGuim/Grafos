@@ -6,6 +6,8 @@
 #include "ArestaSolucao.h"
 #include "VerticeSolucao.h"
 #include <iostream>
+#include <stdlib.h>
+#include <time.h>
 
 using namespace std;
 
@@ -227,8 +229,8 @@ void GrafoL::insereAresta(int vert1, int vert2, int peso){
         Aresta* a = new Aresta();
         Aresta* b = new Aresta();
 
-        if(vert1 == vert2)
-            cout << "Nao eh possivel criar self-loops ! vertices (" << vert1 << "," << vert2 << ")" << endl;
+        if(vert1 == vert2){}
+            //cout << "Nao eh possivel criar self-loops ! vertices (" << vert1 << "," << vert2 << ")" << endl;
             else{
                 if(buscaAresta(vert1, vert2) == NULL){
                     if(p != NULL && t != NULL){
@@ -805,14 +807,14 @@ GrafoL* GrafoL::subgrafoInduzido(int * vet, int tam){
     }
 
 
-    cout << "SUBGRAFO INDUZIDO PELOS VERTICES {";
+    /*cout << "SUBGRAFO INDUZIDO PELOS VERTICES {";
 
     for(int i = 0; i < tam; i++)
         cout << vet[i] << ", ";
 
     cout << "} " << endl;
 
-    //grafo->imprimeArestas();
+    grafo->imprimeArestas();*/
     return grafo;
 }
 
@@ -836,140 +838,6 @@ int GrafoL::numVizinhosTerminais(Vertice* p, int *terminais, int tam){
     return numTerminaisVizinhos;
 }
 
-
-
-/*void GrafoL::steinerGuloso(int *terminais, int tam){
-
-    /*O algoritmo apresenta um grafo como solucao, que é um subgrafo S da instancia e uma arvore geradora
-     de S.A caracteristica gulosa é garantida,pois o algoritmo analisa somente algumas situçoes a partir do vertice
-     em que ele esta, ou seja,localmente.Sempre vai construindo a solucao colocando as arestas na mesma,nunca retirando.
-
-     Inicio:
-        Impossibilita todos os vertices nao terminais que tem grau 1 de aparecerem na soluçao,marcando eles com
-        -1 no vetoSolucao.
-        Ordenamos o vetor de terminais , recebido por parametro, de acordo com os seus graus em ordem decrescente.
-        Pegamos o primeiro do vetor (com grau maior) e ligamos ele (vetorSolucao = 1),pois assim,
-        teria mais chances de ele ter vizinhos terminais e ligá-los de uma vez.
-
-        Enquanto todos os vertices terminais nao estiverem ligados
-             ->Verifica se tem aresta para algum outro terminal fora da solucao
-             ->Se tiver mais de um terminal como vizinho verifica qual aresta tem menor peso e coloca o vertice de destino na solucao(vetorSolucao = 1).
-             ->Se nao tiver nenhum vertice terminal entre seus vizinhos vai para a extremidade da aresta de menor peso e a coloca na solucao(vetorSolucao = 1).
-             ->Se nao tiver nenhum vizinho que nao esteja na solucao, o algoritmo vai para algum vertice da solucao.
-    Fim;
-        Obs: É claro que a solucao é um conjunto de arestas, mas colocamos como apresentaoçao da solucao um subgrafo composto por essas arestas mostrado
-            através das suas listas de adjacência.
-    */
-
-    /*GrafoL solucao;
-    solucao.setDirecionado(false);
-
-    int maximo = buscaVertice(terminais[0])->getDegree();
-    int indiceMax = 0;
-
-    for(int i = 1;i < tam;i++){
-        if(buscaVertice(terminais[i])->getDegree() > maximo){
-            maximo = buscaVertice(terminais[i])->getDegree();
-            indiceMax = i;
-        }
-    }
-
-    int vetorSolucao[10000];
-
-
-    Vertice* p = primeiro;
-
-
-    while(p != NULL){
-        vetorSolucao[p->getId()] = 0;
-        p = p->getProx();
-    }
-
-    p = primeiro;
-
-    while(p != NULL){ //Impossibilita todos os vertices nao terminais que tem grau 1
-        if(p->getDegree() == 1 && !verificaSeEhTerminal(p, terminais, tam))
-            vetorSolucao[p->getId()] = -1;
-        p = p->getProx();
-    }
-
-    int cont = 0; //numero de terminais ligados
-
-
-    Vertice* t = new Vertice(); //primeiro vertice que vai entrar no loop
-    t = buscaVertice(terminais[indiceMax]);//Maior grau entre os terminais
-
-    solucao.insereVertice(t->getId());  //colocamos ele na solucao
-    vetorSolucao[t->getId()] = 1;
-    cont++;
-
-
-    while(cont < tam){
-
-        p = primeiro;
-
-        Vertice* aux = new Vertice();
-        Aresta* a = t->getArestas();
-        int pesoMax = INT_MAX;
-        aux = NULL;
-
-        while(a != NULL){//Verifica se tem aresta para algum outro terminal fora da solucao
-            if(verificaSeEhTerminal(buscaVertice(a->getId()), terminais, tam) && verificaSePodeSolucao(buscaVertice(a->getId()),vetorSolucao)){
-                if(a->getPeso() < pesoMax){
-                    aux = buscaVertice(a->getId());
-                    aux->setId(a->getId());
-                    pesoMax = a->getPeso();
-                }
-            }
-            a = a->getProx();
-        }
-
-        if(pesoMax == INT_MAX){//Se o pesoMax for igual ao INT_MAX, ele nao possui nenhum vizinho terminal.
-            a = t->getArestas();
-            while(a != NULL){//Verifica qual vizinho fora da solucao possui menor peso na aresta
-                if(a->getPeso() < pesoMax && verificaSePodeSolucao(buscaVertice(a->getId()),vetorSolucao)){
-                    aux = buscaVertice(a->getId());
-                    aux->setId(a->getId());
-                    pesoMax = a->getPeso();
-                }
-
-                a = a->getProx();
-            }
-        }
-
-        if(aux == NULL){//Se aux, for NULL, o vertice nao tem nenhum vizinho que possa entrar na solucao
-            vetorSolucao[t->getId()] = 2; //Marcamos como dois, porque assim nunca voltaremos nele, ja que nao tem mais nenhum vizinho que possa entrar na solucao
-            while(p != NULL){
-                if(vetorSolucao[p->getId()] == 1){//pegamos o primeiro e vertice da solucao
-                    aux = p;
-                    aux->setId(p->getId());
-                    break;
-                }
-                p = p->getProx();
-            }
-        }
-
-        if(aux == NULL){//Se ainda assim, aux for NULL, nao há solucao possivel, pois o grafo sera desconexo
-            cout << "Nao tem solucao possivel !" << endl;
-            break;
-        }else{
-            if(verificaSePodeSolucao(aux,vetorSolucao)){//Coloca a aresta na solucao
-                vetorSolucao[aux->getId()] = 1;
-                solucao.insereVertice(aux->getId());
-                solucao.insereAresta(t->getId(), aux->getId());
-
-                if(verificaSeEhTerminal(aux, terminais, tam))
-                    cont++;
-            }
-
-            t = aux;
-        }
-    }
-    cout << endl;
-    cout << "SUBGRAFO SOLUCAO : " << endl;
-    solucao.imprimeArestas();
-}*/
-
 bool GrafoL::verificaSePodeSolucao(Vertice* p, int* vetorSolucao){
 
     if(vetorSolucao[p->getId()] != 0)
@@ -992,6 +860,7 @@ bool GrafoL::verificaSeEhTerminal(Vertice* p, int* terminais, int tam){
 
 GrafoL* GrafoL::kruskal(){
 
+    int numComponentesConexas = 1;
     Vertice* p = primeiro;
     Aresta* a = p->getArestas();
     GrafoL* grafoSolucao = new GrafoL();
@@ -1057,10 +926,102 @@ GrafoL* GrafoL::kruskal(){
         }
     }
 
+    for(int i = 1; i < numVertices;i++)
+        if(arvores[i] != arvores[0])
+            numComponentesConexas = numComponentesConexas + 1;
+    if(numComponentesConexas != 1)
+        cout << "nao eh conexo !" << endl;
+        else
+            cout << "Eh conexo !" << endl;
+
     solucao.imprime();
     return grafoSolucao;
     delete [] arvores;
+
 }
+
+GrafoL* GrafoL::kruskal(int* numComponentesConexas){
+
+    *numComponentesConexas = 1;
+    Vertice* p = primeiro;
+    Aresta* a = p->getArestas();
+    GrafoL* grafoSolucao = new GrafoL();
+
+    int* arvores = new int[numVertices];
+    ArestaSolucao* vetorDeArestas = new ArestaSolucao[numArestas];
+    ListaArestaSolucao solucao;
+
+    for(int i = 0; i < numVertices; i++)
+        arvores[i] = retornaVerticeDoVetor(i);
+
+
+    for(int i = 0; i < numArestas; i++){
+        vetorDeArestas[i].setVertice1(-1);
+        vetorDeArestas[i].setVertice2(-1);
+        vetorDeArestas[i].setPeso(-1);
+    }
+
+    int i = 0;
+
+    while(p != NULL){
+        a = p->getArestas();
+
+        while(a != NULL){
+
+            if(!veSeJaTemArestaSolucao(vetorDeArestas, p->getId(), a->getId())){
+                ArestaSolucao aux(p->getId(), a->getId(), a->getPeso());
+                vetorDeArestas[i] = aux;
+                i++;
+            }
+
+            a = a->getProx();
+        }
+
+        p = p->getProx();
+    }
+
+    ordenaArestas(vetorDeArestas, 0, numArestas);
+    ListaArestaSolucao listaDeArestas;
+
+    for (int i = 0; i < numArestas; i++)
+        listaDeArestas.insereAresta(&vetorDeArestas[i]);
+
+
+    //for (int i = 0; i < numArestas; i++)
+        //cout << vetorDeArestas[i].getVertice1() << "-" << vetorDeArestas[i].getVertice2() << "//" << vetorDeArestas[i].getPeso() << endl;
+
+
+    int cont = 0;
+    for (int i = 0; cont < (numVertices-1) && !listaDeArestas.vazia() && i < numArestas; i++) {
+        int arvore1;
+        int arvore2;
+        arvore1 = buscaArvore(vetorDeArestas[i].getVertice1(), arvores);
+        arvore2 = buscaArvore(vetorDeArestas[i].getVertice2(), arvores);
+        if (arvore1 != arvore2) {
+            uneArvores( arvore1, arvore2, arvores);
+            listaDeArestas.removeAresta(vetorDeArestas[i].getVertice1(), vetorDeArestas[i].getVertice2());
+            grafoSolucao->insereVertice(vetorDeArestas[i].getVertice1());
+            grafoSolucao->insereVertice(vetorDeArestas[i].getVertice2());
+            grafoSolucao->insereAresta(vetorDeArestas[i].getVertice1(), vetorDeArestas[i].getVertice2(), vetorDeArestas[i].getPeso());
+            solucao.insereAresta(&vetorDeArestas[i]);
+            cont++;
+        }
+    }
+
+    for(int i = 1; i < numVertices;i++)
+        if(arvores[i] != arvores[0])
+            *numComponentesConexas = *numComponentesConexas + 1;
+    if(*numComponentesConexas != 1)
+        cout << "nao eh conexo !" << endl;
+        else
+            cout << "Eh conexo !" << endl;
+
+    solucao.imprime();
+    return grafoSolucao;
+    delete [] arvores;
+
+}
+
 
 int GrafoL::buscaArvore(int id, int* arvores){//retorna em qual arvore o vertice esta
 
@@ -1178,7 +1139,31 @@ bool GrafoL::veSeJaTemArestaSolucao(ArestaSolucao vetorDeArestas[], int id, int 
     return false;
 }
 
-void GrafoL::steinerGuloso(int* terminais, int tam){
+void GrafoL::steinerGulosoRandomizado(int* terminais, int tam, float alfa, int numeroSolucoes){
+
+
+
+}
+
+void GrafoL::preencheListaDeCandidatos(ListaVerticeSolucao* listaDeCandidatos, int* terminais, int tam){
+
+    Vertice* p = primeiro;
+
+    int i = 0;
+    while(p != NULL){
+        if(!verificaSeEhTerminal(p , terminais, tam)){
+            VerticeSolucao* a = new VerticeSolucao();
+            a->setId(p->getId());
+            a->setRankk(0);
+            listaDeCandidatos->insereVertice(a);
+            i++;
+        }
+        p = p->getProx();
+    }
+}
+
+
+/*GrafoL* GrafoL::steinerGuloso(int* terminais, int tam){
 
 
     Vertice* p = primeiro;
@@ -1213,13 +1198,18 @@ void GrafoL::steinerGuloso(int* terminais, int tam){
     newGrafo = subgrafoInduzido(terminais, tam);
     newGrafo = montaArvore(newGrafo, &numeroDeComponentesConexas);
 
+    if(listaDeCandidatos->vazia())
+        newGrafo = kruskal();
 
     int* vetorAux2 = new int[numVertices];
 
+    for(int i = 0; i < numVertices;i++)
+        vetorAux2[i] = 0;
+
     for(int i = 0; i < tam;i++)
         vetorAux2[i] = terminais[i];
-    int auxiliar = tam;
 
+    int auxiliar = tam;
 
     while(numeroDeComponentesConexas != 1 && !listaDeCandidatos->vazia()){
         auxiliar = auxiliar +1;
@@ -1231,19 +1221,89 @@ void GrafoL::steinerGuloso(int* terminais, int tam){
         listaDeCandidatos->removeVertice();
         atribuiRank(listaDeCandidatos, terminais, tam, grafoAux);
         ordenaListaDeCandidatos(listaDeCandidatos, 0, listaDeCandidatos->getTamanho());
-        //grafoAux->imprimeArestas();
-        //listaDeCandidatos->imprime();
+
     }
 
-    if(listaDeCandidatos->vazia())
-        newGrafo = kruskal();
 
     podaGrafo(newGrafo, terminais, tam);
 
     cout << "SOLUCAO : " << endl;
 
     newGrafo->imprimeArestas();
+    delete [] vetorAux2;
+    return newGrafo;
+}*/
+
+GrafoL* GrafoL::steinerGuloso(int* terminais, int tam){
+
+    Vertice* p = primeiro;
+    GrafoL* solucao = new GrafoL();
+    GrafoL* grafoAux = new GrafoL();
+    ListaVerticeSolucao* listaCandidatos = new ListaVerticeSolucao();
+    int numComponentesConexas = 1;
+
+    grafoAux = copiaGrafo();
+
+    while(p != NULL){
+
+        if(!verificaSeEhTerminal(p, terminais, tam)){
+            VerticeSolucao* a = new VerticeSolucao();
+            a->setId(p->getId());
+            a->setRankk(0);
+            listaCandidatos->insereVertice(a);
+        }
+
+        p = p->getProx();
+    }
+
+    if(listaCandidatos->vazia()){
+        solucao = kruskal();
+        solucao->imprimeArestas();
+        return solucao;
+    }
+
+
+    //grafoAux->imprimeArestas();
+    //listaCandidatos->imprime();
+
+    atribuiRank(listaCandidatos, terminais, tam, grafoAux);
+    ordenaListaDeCandidatos(listaCandidatos, 0, listaCandidatos->getTamanho());
+
+    solucao = subgrafoInduzido(terminais, tam);
+    solucao = kruskal(&numComponentesConexas);
+
+    while(numComponentesConexas != 1 && !listaCandidatos->vazia()){
+
+        Vertice* p = buscaVertice(listaCandidatos->getPrimeiro()->getId());
+        Aresta* adj = p->getArestas();
+
+        while(adj != NULL){
+
+            solucao->insereVertice(listaCandidatos->getPrimeiro()->getId());
+            solucao->insereVertice(adj->getId());
+            solucao->insereAresta(listaCandidatos->getPrimeiro()->getId(), adj->getId(), adj->getPeso());
+
+            adj = adj->getProx();
+        }
+
+        solucao = solucao->kruskal(&numComponentesConexas);
+        grafoAux->retiraVertice(listaCandidatos->getPrimeiro()->getId());
+        listaCandidatos->removeVertice();
+
+
+        atribuiRank(listaCandidatos, terminais, tam, grafoAux);
+        ordenaListaDeCandidatos(listaCandidatos, 0, listaCandidatos->getTamanho());
+    }
+
+    if(listaCandidatos->vazia() && numComponentesConexas != 1)
+        cout << "Nao ha solucao, nao eh possivel criar uma arvore ligando os terminais !" << endl;
+        else{
+            cout << "SOLUCAO : " << endl;
+            podaGrafo(solucao, terminais, tam);
+            solucao->imprimeArestas();
+        }
 }
+
 
 GrafoL* GrafoL::podaGrafo(GrafoL* newGrafo, int* terminais, int tam){
 
@@ -1262,19 +1322,40 @@ GrafoL* GrafoL::copiaGrafo(){
     Aresta* a;
     GrafoL* grafoCopiado = new GrafoL();
 
-    while(p != NULL){
-        a = p->getArestas();
-        grafoCopiado->insereVertice(p->getId());
 
-        while(a != NULL){
-            grafoCopiado->insereAresta(p->getId(), a->getId(), a->getPeso());
-            a = a->getProx();
+    if(!ehDirecionado){
+
+        while(p != NULL){
+            a = p->getArestas();
+            grafoCopiado->insereVertice(p->getId());
+
+            while(a != NULL){
+                grafoCopiado->insereVertice(a->getId());
+                grafoCopiado->insereAresta(p->getId(), a->getId(), a->getPeso());
+                a = a->getProx();
+            }
+
+            p = p->getProx();
         }
 
-        p = p->getProx();
-    }
+        return grafoCopiado;
+    }else{
+        grafoCopiado->setDirecionado(1);
 
-    return grafoCopiado;
+        while(p != NULL){
+            a = p->getArestas();
+            grafoCopiado->insereVertice(p->getId());
+            while(a != NULL){
+                grafoCopiado->insereVertice(a->getId());
+                grafoCopiado->insereArco(p->getId(), a->getId(), a->getPeso());
+                a = a->getProx();
+            }
+
+            p = p->getProx();
+        }
+
+        return grafoCopiado;
+    }
 }
 
 
@@ -1286,73 +1367,80 @@ GrafoL* GrafoL::montaArvore(GrafoL* newGrafo, int* numComponentesConexas){
     Aresta* a = p->getArestas();
     GrafoL* grafoSolucao = new GrafoL();
 
-    int* arvores = new int[newGrafo->numVertices];
-    ArestaSolucao* vetorDeArestas = new ArestaSolucao[newGrafo->numArestas];
-    ListaArestaSolucao solucao;
 
-    for(int i = 0; i < newGrafo->numVertices; i++)
-        arvores[i] = retornaVerticeDoVetor(i, newGrafo);
+    if(newGrafo->getNumVertices() > 1){
+
+        int* arvores = new int[newGrafo->numVertices];
+        ArestaSolucao* vetorDeArestas = new ArestaSolucao[newGrafo->numArestas];
+        ListaArestaSolucao solucao;
+
+        for(int i = 0; i < newGrafo->numVertices; i++)
+            arvores[i] = retornaVerticeDoVetor(i, newGrafo);
 
 
-    for(int i = 0; i < newGrafo->numArestas; i++){
-        vetorDeArestas[i].setVertice1(-1);
-        vetorDeArestas[i].setVertice2(-1);
-        vetorDeArestas[i].setPeso(-1);
-    }
+        for(int i = 0; i < newGrafo->numArestas; i++){
+            vetorDeArestas[i].setVertice1(-1);
+            vetorDeArestas[i].setVertice2(-1);
+            vetorDeArestas[i].setPeso(-1);
+        }
 
-    int i = 0;
+        int i = 0;
 
-    while(p != NULL){
-        a = p->getArestas();
+        while(p != NULL){
+            a = p->getArestas();
 
-        while(a != NULL){
+            while(a != NULL){
 
-            if(!veSeJaTemArestaSolucao(vetorDeArestas, p->getId(), a->getId(), newGrafo->numArestas)){
-                ArestaSolucao aux(p->getId(), a->getId(), a->getPeso());
-                vetorDeArestas[i] = aux;
-                i++;
+                if(!veSeJaTemArestaSolucao(vetorDeArestas, p->getId(), a->getId(), newGrafo->numArestas)){
+                    ArestaSolucao aux(p->getId(), a->getId(), a->getPeso());
+                    vetorDeArestas[i] = aux;
+                    i++;
+                }
+
+                a = a->getProx();
             }
 
-            a = a->getProx();
+            p = p->getProx();
         }
 
-        p = p->getProx();
-    }
+        ordenaArestas(vetorDeArestas, 0, newGrafo->numArestas);
+        ListaArestaSolucao listaDeArestas;
 
-    ordenaArestas(vetorDeArestas, 0, newGrafo->numArestas);
-    ListaArestaSolucao listaDeArestas;
-
-    for (int i = 0; i < newGrafo->numArestas; i++)
-        listaDeArestas.insereAresta(&vetorDeArestas[i]);
+        for (int i = 0; i < newGrafo->numArestas; i++)
+            listaDeArestas.insereAresta(&vetorDeArestas[i]);
 
 
-   // for (int i = 0; i < newGrafo->numArestas; i++)
-        //cout << vetorDeArestas[i].getVertice1() << "-" << vetorDeArestas[i].getVertice2() << "//" << vetorDeArestas[i].getPeso() << endl;
+       // for (int i = 0; i < newGrafo->numArestas; i++)
+            //cout << vetorDeArestas[i].getVertice1() << "-" << vetorDeArestas[i].getVertice2() << "//" << vetorDeArestas[i].getPeso() << endl;
 
 
-    int cont = 0;
-    for (int i = 0; cont < (newGrafo->numVertices-1) && !listaDeArestas.vazia() && i < newGrafo->numArestas; i++) {
-        int arvore1;
-        int arvore2;
-        arvore1 = buscaArvore(vetorDeArestas[i].getVertice1(), arvores, newGrafo);
-        arvore2 = buscaArvore(vetorDeArestas[i].getVertice2(), arvores, newGrafo);
-        if (arvore1 != arvore2) {
-            uneArvores(arvore1, arvore2, arvores, newGrafo);
-            listaDeArestas.removeAresta(vetorDeArestas[i].getVertice1(), vetorDeArestas[i].getVertice2());
-            solucao.insereAresta(&vetorDeArestas[i]);
-            grafoSolucao->insereVertice(vetorDeArestas[i].getVertice1());
-            grafoSolucao->insereVertice(vetorDeArestas[i].getVertice2());
-            grafoSolucao->insereAresta(vetorDeArestas[i].getVertice1(), vetorDeArestas[i].getVertice2(), vetorDeArestas[i].getPeso());
-            cont++;
+        int cont = 0;
+        for (int i = 0; cont < (newGrafo->numVertices-1) && !listaDeArestas.vazia() && i < newGrafo->numArestas; i++) {
+            int arvore1;
+            int arvore2;
+            arvore1 = buscaArvore(vetorDeArestas[i].getVertice1(), arvores, newGrafo);
+            arvore2 = buscaArvore(vetorDeArestas[i].getVertice2(), arvores, newGrafo);
+            if (arvore1 != arvore2) {
+                uneArvores(arvore1, arvore2, arvores, newGrafo);
+                listaDeArestas.removeAresta(vetorDeArestas[i].getVertice1(), vetorDeArestas[i].getVertice2());
+                solucao.insereAresta(&vetorDeArestas[i]);
+                grafoSolucao->insereVertice(vetorDeArestas[i].getVertice1());
+                grafoSolucao->insereVertice(vetorDeArestas[i].getVertice2());
+                grafoSolucao->insereAresta(vetorDeArestas[i].getVertice1(), vetorDeArestas[i].getVertice2(), vetorDeArestas[i].getPeso());
+                cont++;
+            }
         }
+
+        for(int i = 1; i < newGrafo->numVertices;i++)
+            if(arvores[i] != arvores[0])
+                *numComponentesConexas = *numComponentesConexas + 1;
+
+        delete [] arvores;
+        return grafoSolucao;
+    }else{
+        grafoSolucao->insereVertice(newGrafo->primeiro->getId());
+        return grafoSolucao;
     }
-
-    for(int i = 1; i < newGrafo->numVertices;i++)
-        if(arvores[i] != arvores[0])
-            *numComponentesConexas = *numComponentesConexas + 1;
-
-    return grafoSolucao;
-    delete [] arvores;
 }
 
 
@@ -1377,13 +1465,12 @@ void GrafoL::atribuiRank(ListaVerticeSolucao* listaDeCandidatos, int* terminais,
             }
 
             rankk = ((soma/p->getDegree())-(numVizinhosTerminais(p, terminais, tam)));
-
             listaDeCandidatos->buscaVerticeSolucao(p->getId())->setRankk(rankk);
-
         }
 
         p = p->getProx();
     }
+
 }
 
 void GrafoL::ordenaListaDeCandidatos(ListaVerticeSolucao* listaDeCandidatos , int inicio, int fim){
@@ -1463,4 +1550,84 @@ float GrafoL::normaliza(float valor){//coloca o peso da aresta entre  1 e 10
     x = ((valor - minimo)/(maximo - minimo))*10;
 
     return x;
+}
+
+float GrafoL::pesoDaArvore(){
+
+    Vertice* p = primeiro;
+    Aresta* a;
+    float soma = 0;
+
+    while(p != NULL){
+        a = p->getArestas();
+
+        while(a != NULL){
+            soma = soma + a->getPeso();
+            a = a->getProx();
+        }
+
+        p = p ->getProx();
+    }
+
+    return soma/2;
+}
+
+int* GrafoL::djisktra(int part){
+
+    bool pred[numVertices]; ///vetor marca predecessor
+
+    int dist[numVertices]; ///vetor distancia
+
+    int infinity=INT_MAX/2;
+
+    Vertice* Q = new Vertice[numVertices];
+    Q[0]=*primeiro;
+    Fila fila;
+    for(int i=0;i<(numVertices-1);i++){//*
+        dist[i] = infinity;
+        pred[i] = false;
+        Q[i+1] = *Q[i].getProx();
+        fila.enfileira(Q[i].getId());
+    }
+
+    fila.enfileira(Q[numVertices - 1].getId());///preenche vetores //*
+
+
+    dist[part] = 0;
+
+    int u=0;
+
+
+    while(!fila.vazia()){ ///loop principal
+
+        u = fila.getInicio();
+        cout << u << endl;
+        cout << fila.desenfileira() << endl;
+
+
+        if(pred[u]==false){
+
+            pred[u] = true;
+            Aresta* aux = Q[u].getArestas();
+
+            while(aux != NULL){ ///verifica vertices adjacentes e custo de cada
+
+                Vertice* v = Q[u].getProx();
+                int custo = aux->getPeso();//Q[u].getArestas()->getPeso(); //*
+
+                if(dist[v->getId()] > (dist[u] + custo)){ ///atualiza o custo
+
+                    dist[v->getId()] = dist[u] + custo;
+                    fila.enfileira(v->getId());
+
+                }
+                aux = aux->getProx();
+            }
+        }
+
+    }
+
+    //for(int i = 0; i <= 6;i++)
+        //cout << dist[i] << " ";
+    return dist;//*
 }
