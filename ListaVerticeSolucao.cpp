@@ -1,6 +1,7 @@
 #include "VerticeSolucao.h"
 #include "ListaVerticeSolucao.h"
 #include <iostream>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -19,29 +20,16 @@ ListaVerticeSolucao::~ListaVerticeSolucao(){
         delete p;
         p = t;
     }
+
+    free(p);
 }
 
-void ListaVerticeSolucao::insereVertice(VerticeSolucao* a){
-
-    VerticeSolucao* p = primeiro;
-
-    if(primeiro == NULL){
-        primeiro = a;
-        a->setProx(NULL);
-    }else{
-        primeiro = a;
-        a->setProx(p);
-    }
-
-    tamanho++;
-}
-
-void ListaVerticeSolucao::insereVertice(int id){
+void ListaVerticeSolucao::insereVertice(int id, float rankk){
 
     VerticeSolucao* p = primeiro;
     VerticeSolucao* a = new VerticeSolucao();
     a->setId(id);
-    a->setRankk(0);
+    a->setRankk(rankk);
 
     if(primeiro == NULL){
         primeiro = a;
@@ -58,16 +46,12 @@ void ListaVerticeSolucao::insereVertice(int id){
 VerticeSolucao* ListaVerticeSolucao::removeVertice(){
 
     VerticeSolucao* p = primeiro;
-    VerticeSolucao* aux = NULL;
 
     if(p != NULL){
         primeiro = p->getProx();
-        aux = p;
         delete p;
         tamanho--;
     }
-
-    return aux;
 
 }
 
@@ -121,7 +105,6 @@ VerticeSolucao* ListaVerticeSolucao::removeVerticeDaPosicao(int posicao){
     VerticeSolucao* aux = NULL;
     int cont = 0;
 
-
     while(p != NULL){
         if(cont == posicao)
             break;
@@ -131,7 +114,7 @@ VerticeSolucao* ListaVerticeSolucao::removeVerticeDaPosicao(int posicao){
     }
 
     if(aux == NULL){
-        primeiro = primeiro->getProx();
+        primeiro = p->getProx();
         delete p;
         tamanho--;
     }else{

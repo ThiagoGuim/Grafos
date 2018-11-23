@@ -1,12 +1,5 @@
 #include "ArestaSolucao.h"
 
-ArestaSolucao::ArestaSolucao(int id1, int id2, int peso){
-
-    vertice1 = id1;
-    vertice2 = id2;
-    this->peso = peso;
-}
-
 ArestaSolucao::ArestaSolucao(){}
 
 ArestaSolucao::~ArestaSolucao(){}

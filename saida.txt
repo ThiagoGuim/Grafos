@@ -1,0 +1,11 @@
+14- Apresentar uma Arvore geradora minima (Kruskal)
+LISTA DE ADJACENCIAS : 
+[2]4 
+[4]5 2 
+[5]7 4 6 
+[6]5 
+[9]7 11 
+[11]9 
+[7]5 9 
+NUM DE VERTICES : 7
+NUM DE ARESTAS : 6

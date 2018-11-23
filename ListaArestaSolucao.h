@@ -8,15 +8,20 @@ class ListaArestaSolucao{
 private:
 
     ArestaSolucao* primeiro;
-
+    int tamanho;
 
 public:
 
     ListaArestaSolucao();
     ~ListaArestaSolucao();
 
-    void insereAresta(ArestaSolucao* a);
-    void removeAresta(int id, int id2);
+    ArestaSolucao* getPrimeiro();
+    void insereAresta(int id, int id2, int peso);
+    ArestaSolucao* removeAresta(int id, int id2);
+    ArestaSolucao* removeArestaComRetorno();
+    void removeAresta();
+    void removeTudo();
+    int getTamanho();
     bool vazia();
     void imprime();
 

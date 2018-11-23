@@ -14,8 +14,7 @@ public:
     ListaVerticeSolucao();
     ~ListaVerticeSolucao();
 
-    void insereVertice(VerticeSolucao* a);
-    void insereVertice(int id);
+    void insereVertice(int id, float rankk);
     void removeTudo();
     VerticeSolucao* removeVertice();
     VerticeSolucao* removeVerticeDaPosicao(int posicao);

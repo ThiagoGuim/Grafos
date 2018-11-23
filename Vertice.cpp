@@ -9,6 +9,8 @@ Vertice::Vertice(){
     inDegree = 0;
     outDegree = 0;
     primeiro = NULL;
+    ehTerminal = false;
+    marcado = false;
 
 }
 
@@ -21,11 +23,13 @@ Vertice::~Vertice(){
         delete p;
         p = t;
     }
+
+    free(p);
 }
 
 int Vertice::getId(){
 
-    return id;
+    return this->id;
 }
 
 void Vertice::setId(int id){
@@ -80,22 +84,22 @@ void Vertice::insereArco(int vert, Aresta* a){
     }
 }
 
-void Vertice::insereAresta(int vert, Aresta* a, int peso){
+void Vertice::insereAresta(int vert, int peso){
 
     Aresta* p = primeiro;
+    Aresta* a = new Aresta();
+    a->setPeso(peso);
+    a->setId(vert);
 
     if(primeiro == NULL){
         primeiro = a;
-        a->setPeso(peso);
-        a->setId(vert);
         a->setProx(NULL);
     }else{
         primeiro = a;
-        a->setPeso(peso);
-        a->setId(vert);
         a->setProx(p);
     }
 }
+
 
 void Vertice::insereArco(int vert, Aresta* a, int peso){
 
@@ -125,7 +129,6 @@ void Vertice::retiraAresta(int vert2)
         cout << "Aresta inexistente ! vertice " << id << "nao possui nenhuma aresta !" ;
     }
 
-
     while(p != NULL){
         if(p->getId() == vert2)
             break;
@@ -141,6 +144,8 @@ void Vertice::retiraAresta(int vert2)
         delete p;
     }
 
+    free(p);
+    free(aux);
     decreaseDegree();
 }
 
@@ -171,12 +176,12 @@ void Vertice::retiraArco(int vert2)
     decreaseOutDegree();
 }
 
-void Vertice::imprime(){
+void Vertice::imprime(FILE* arq){
 
     Aresta *p = primeiro;
 
     while(p != NULL){
-        cout << p->getId() << " ";
+        fprintf(arq, "%d ", p->getId());
         p = p->getProx();
     }
 }
@@ -224,5 +229,25 @@ void Vertice::decreaseInDegree()
 void Vertice::decreaseOutDegree()
 {
     outDegree--;
+}
+
+bool Vertice::veSeEhTerminal()
+{
+    return ehTerminal;
+}
+
+void Vertice::setTerminal(bool i)
+{
+    ehTerminal = i;
+}
+
+bool Vertice::getMarcado()
+{
+    return marcado;
+}
+
+void Vertice::marcar()
+{
+    marcado = true;
 }
 

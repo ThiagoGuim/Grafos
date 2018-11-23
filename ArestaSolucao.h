@@ -13,7 +13,6 @@ private:
 public:
 
     ArestaSolucao();
-    ArestaSolucao(int id1, int id2, int peso);
     ~ArestaSolucao();
 
     int getVertice1();
