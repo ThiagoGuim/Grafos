@@ -245,7 +245,7 @@ void chamaOpcaoDoMenu(int opcao, FILE* arq_saida, GrafoL* grafo){
         }
         case 14:{
             fprintf(arq_saida, "14- Apresentar uma Arvore geradora minima (Kruskal)\n");
-            grafo->kruskal(arq_saida);
+            grafo = grafo->kruskal(arq_saida);
             break;
         }
         case 15:{
@@ -275,7 +275,7 @@ void chamaOpcaoDoMenu(int opcao, FILE* arq_saida, GrafoL* grafo){
         }
         case 19:{
             fprintf(arq_saida, "19- Apresentar uma Arvore geradora minima Steiner(Guloso Randomizado)\n");
-            //grafo->steinerGulosoRandomizado(arq_saida, 0.4, 500);
+            grafo->steinerGulosoRandomizado(arq_saida, 0.4, 500);
             break;
         }
         case 20:{

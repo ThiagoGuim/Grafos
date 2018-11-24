@@ -4,12 +4,12 @@
 class VerticeSolucao{
 
 private:
-    int id;
-    float rankk;
-    VerticeSolucao* prox;
 
 
 public:
+    int id;
+    float rankk;
+    VerticeSolucao* prox;
 
     VerticeSolucao();
     ~VerticeSolucao();

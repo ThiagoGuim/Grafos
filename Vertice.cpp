@@ -10,7 +10,6 @@ Vertice::Vertice(){
     outDegree = 0;
     primeiro = NULL;
     ehTerminal = false;
-    marcado = false;
 
 }
 
@@ -241,13 +240,4 @@ void Vertice::setTerminal(bool i)
     ehTerminal = i;
 }
 
-bool Vertice::getMarcado()
-{
-    return marcado;
-}
-
-void Vertice::marcar()
-{
-    marcado = true;
-}
 

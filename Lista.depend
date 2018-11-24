@@ -17,7 +17,7 @@
 1537831234 c:\devjogos\project\lista\fila.h
 	"Vertice.h"
 
-1543000037 c:\devjogos\project\lista\vertice.h
+1543025177 c:\devjogos\project\lista\vertice.h
 	"Aresta.h"
 	<cstdio>
 	<cstdlib>
@@ -37,25 +37,25 @@
 	<iostream>
 	<stdlib.h>
 
-1539288905 c:\devjogos\project\lista\verticesolucao.h
+1543075104 c:\devjogos\project\lista\verticesolucao.h
 
-1542823800 c:\devjogos\project\lista\listaverticesolucao.h
+1543024683 c:\devjogos\project\lista\listaverticesolucao.h
 	"VerticeSolucao.h"
 
-1543000955 source:c:\devjogos\project\lista\main.cpp
+1543086860 source:c:\devjogos\project\lista\main.cpp
 	<iostream>
 	<fstream>
 	<cstring>
 	"GrafoL.h"
 
-1543002306 c:\devjogos\project\lista\grafol.h
+1543089639 c:\devjogos\project\lista\grafol.h
 	"Vertice.h"
 	"VerticeSolucao.h"
 	"ArestaSolucao.h"
 	"ListaVerticeSolucao.h"
 	"ListaArestaSolucao.h"
 
-1543000058 source:c:\devjogos\project\lista\vertice.cpp
+1543025207 source:c:\devjogos\project\lista\vertice.cpp
 	"Vertice.h"
 	<iostream>
 
@@ -63,7 +63,7 @@
 	<iostream>
 	"VerticeSolucao.h"
 
-1543002341 source:c:\devjogos\project\lista\grafol.cpp
+1543090117 source:c:\devjogos\project\lista\grafol.cpp
 	"GrafoL.h"
 	"Fila.h"
 	"limits.h"
@@ -74,4 +74,11 @@
 	<iostream>
 	<stdlib.h>
 	<time.h>
+
+1543023502 source:c:\devjogos\project\lista\listavertice.cpp
+	"ListaVertice.h"
+	<iostream>
+
+1543023502 c:\devjogos\project\lista\listavertice.h
+	"Vertice.h"
 

@@ -75,11 +75,10 @@ public:
     GrafoL* montaArvore(GrafoL* newGrafo, int* numComponentesConexas);
     GrafoL* podaGrafo(int* terminais, int tam);
     void steinerGuloso(FILE* arq);//algoritmo guloso para o problema da arvore de steiner,recebe os terminais atraves de um vetor pela main
-    GrafoL* steinerGuloso();
+    void steinerGuloso(FILE* arq, ListaVerticeSolucao* listaCandidatos, int* terminais, int tam,  float* pesoDaMelhorSolucao, int* numArestasDaMelhorSolucao, int* numVerticesDaMelhorSolucao);
     void steinerGulosoRandomizado(FILE* arq, float alfa, int numIteracoes);
     bool verificaSePodeSolucao(Vertice* p,int* vetorSolucao);//verifica se o vertice p pode entrar na solucao
     bool verificaSeEhTerminal(Vertice *p, int *terminais,int tam);//verifica se eh um terminal do problema da arvore de steiner
-    void preencheListaDeCandidatos(ListaVerticeSolucao* listaDeCandidatos, int* terminais,  int tam);
     GrafoL* copiaGrafo();
     float pesoDaArvore();
     int numComponentesConexas(int tam);

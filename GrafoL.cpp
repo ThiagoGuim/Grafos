@@ -1436,23 +1436,23 @@ void GrafoL::teste(FILE* arq){
 void GrafoL::removeTudo(){
 
     Vertice* p = primeiro;
+    Aresta* a;
+    Aresta* aux;
+    Vertice* aux2;
 
-    int cont = 1;
     while(p != NULL){
-
-        Vertice *t = p->getProx();
-        Aresta* a = p->getArestas();
+        a = p->getArestas();
+        aux2 = p->getProx();
 
         while(a != NULL){
-            Aresta* aux = a->getProx();
-            delete a;
+            aux = a->getProx();
+            retiraAresta(p->getId(), a->getId());
             a = aux;
         }
 
-        delete p;
-        p = t;
+        retiraVertice(p->getId());
+        p = aux2;
     }
-
 }
 
 
@@ -1466,41 +1466,29 @@ void GrafoL::steinerGuloso(FILE* arq){
     int tam = numTerminais();
     int* terminais = new int[tam];
 
-    int* gabarito = new int[numVertices];
-
-    for(int j = 0; j < numVertices; j++){//mapea
-        gabarito[j] = p->getId();
-        p = p->getProx();
-    }
-
-
     int maximo;
     int minimo;
 
-    p = primeiro;
 
     int i = 0;
     while(p != NULL){
         if(p->veSeEhTerminal()){
             terminais[i] = p->getId();
-            p->marcar();
             i++;
         }else
             listaCandidatos->insereVertice(p->getId(), 0);
+
         p = p->getProx();
     }
-
 
     solucao = subgrafoInduzido(terminais, tam);
     cout << "ACABOU O SUBGRAFO INDUZIDO" << endl;
 
     achaMaximoMinimo(&maximo, &minimo);
-
     atribuiRank(listaCandidatos, terminais, tam, maximo, minimo);
     ordenaListaDeCandidatos(listaCandidatos,0 ,listaCandidatos->getTamanho());
+
     cout << "ACABOU DE ORDENAR" << endl;
-
-
 
     Aresta* adj;
     Vertice* z;
@@ -1525,6 +1513,7 @@ void GrafoL::steinerGuloso(FILE* arq){
             }
 
             x = solucao->numComponentesConexas(solucao->getNumVertices());
+
             listaCandidatos->removeVertice();
         }else
             break;
@@ -1548,193 +1537,206 @@ void GrafoL::steinerGuloso(FILE* arq){
     cout << "TEMPO: " << fim - inicio << endl;
 }
 
-/*GrafoL* GrafoL::steinerGuloso(){
+void GrafoL::steinerGuloso(FILE* arq, ListaVerticeSolucao* listaCandidatos, int* terminais, int tam, float* pesoDaMelhorSolucao, int* numArestasDaMelhorSolucao, int* numVerticesDaMelhorSolucao){
 
-    Vertice* p = primeiro;
     GrafoL* solucao = new GrafoL();
-    ListaVerticeSolucao* listaCandidatos = new ListaVerticeSolucao();
-    GrafoL* grafoAux = new GrafoL();
-    grafoAux = copiaGrafo();
-    int tam = numTerminais();
-    int* terminais = new int[tam];
-
-    int i = 0;
-    while(p != NULL){
-        if(p->veSeEhTerminal()){
-            terminais[i] = p->getId();
-            i++;
-        }
-        p = p->getProx();
-    }
-
-    p = primeiro;
-
-    while(p != NULL){
-
-        if(!verificaSeEhTerminal(p, terminais, tam))
-            listaCandidatos->insereVertice(p->getId(), 0);
-
-        p = p->getProx();
-    }
-
 
     solucao = subgrafoInduzido(terminais, tam);
-
-    atribuiRank(listaCandidatos, terminais, tam);
-    ordenaListaDeCandidatos(listaCandidatos,0 ,listaCandidatos->getTamanho());
-
     Aresta* adj;
-    while(solucao->numComponentesConexas() != 1 && !listaCandidatos->vazia()){
-        Vertice* z = buscaVertice(listaCandidatos->getPrimeiro()->getId());
+    Vertice* z;
 
+    int cont = 0;
+    int x = solucao->numComponentesConexas(solucao->getNumVertices());
+
+    while(x != 1 && cont < listaCandidatos->getTamanho()){
+
+        z = buscaVertice(listaCandidatos->getPosicaoEscolhida(cont)->getId());
+        cont++;
         if(z != NULL){
             adj = z->getArestas();
 
             solucao->insereVertice(z->getId());
+
             while(adj != NULL){
+
                 solucao->insereVertice(adj->getId());
                 solucao->insereAresta(z->getId(), adj->getId(), adj->getPeso());
                 adj = adj->getProx();
             }
 
-            listaCandidatos->removeVertice();
+            x = solucao->numComponentesConexas(solucao->getNumVertices());
+
         }else
             break;
     }
 
-    if(solucao->numComponentesConexas() == 1){
+    if(x == 1){
         solucao = solucao->kruskal();
         solucao->podaGrafo(terminais, tam);
-        delete [] terminais;
-        delete listaCandidatos;
-        return solucao;
+        *pesoDaMelhorSolucao = solucao->pesoDaArvore();
+        *numVerticesDaMelhorSolucao = solucao->numVertices;
+        *numArestasDaMelhorSolucao = solucao->numArestas;
+    }else{
+        *pesoDaMelhorSolucao = 0;
+        *numVerticesDaMelhorSolucao = 0;
+        *numArestasDaMelhorSolucao = 0;
     }
+
+
+    delete solucao;
 }
+
+/*
+
+int intervalo = 0;
+int posicaoSorteada;
+srand(time(NULL));
+
+intervalo = (int)(alfa*listaCandidatos->getTamanho());
+
+                if(intervalo == 0)
+                    posicaoSorteada = 0;
+                    else
+                        posicaoSorteada = rand() % intervalo;*/
 
 
 void GrafoL::steinerGulosoRandomizado(FILE* arq, float alfa, int k){
 
     Vertice* p = primeiro;
-    GrafoL* melhorSolucao;
+    GrafoL* solucaoAtual;
     ListaVerticeSolucao* listaCandidatos = new ListaVerticeSolucao();
-    int pesoDaMelhorSolucao;
+
     int tam = numTerminais();
     int* terminais = new int[tam];
 
+    float pesoDaMelhorSolucao;
+    int numVerticesMelhorSolucao;
+    int numArestasMelhorSolucao;
+
+    int maximo;
+    int minimo;
 
     int i = 0;
     while(p != NULL){
         if(p->veSeEhTerminal()){
             terminais[i] = p->getId();
             i++;
-        }
+        }else
+            listaCandidatos->insereVertice(p->getId(), 0);
+
         p = p->getProx();
     }
 
-    p = primeiro;
+    achaMaximoMinimo(&maximo, &minimo);
+    atribuiRank(listaCandidatos, terminais, tam, maximo, minimo);
+    ordenaListaDeCandidatos(listaCandidatos, 0, listaCandidatos->getTamanho());
 
-    while(p != NULL){
+    steinerGuloso(arq, listaCandidatos, terminais, tam, &pesoDaMelhorSolucao, &numArestasMelhorSolucao, &numVerticesMelhorSolucao);
 
-        if(!verificaSeEhTerminal(p, terminais, tam))
-            listaCandidatos->insereVertice(p->getId(), 0);
+    fprintf(arq, "NUM DE VERTICES : %d\n", numVerticesMelhorSolucao);
+    fprintf(arq, "NUM DE ARESTAS : %d\n",  numArestasMelhorSolucao);
+    fprintf(arq, "PESO DA ARVORE DE STEINER : %.2f",  pesoDaMelhorSolucao);
 
-            p = p->getProx();
-    }
-
-    atribuiRank(listaCandidatos,terminais,tam);
-
-    melhorSolucao = steinerGuloso();
-    pesoDaMelhorSolucao = melhorSolucao->pesoDaArvore();
-
+    Vertice* z;
     Aresta* adj;
+
     int intervalo = 0;
     int posicaoSorteada;
     srand(time(NULL));
+    int x;
+
+    solucaoAtual = subgrafoInduzido(terminais, tam);
+    x = solucaoAtual->numComponentesConexas(tam);
 
     if(!listaCandidatos->vazia()){
+        for(int j = 0; j < 10; j++){
 
+            solucaoAtual = subgrafoInduzido(terminais, tam);
+            x = solucaoAtual->numComponentesConexas(tam);
 
+            ListaVerticeSolucao* listaCandidatos2 = new ListaVerticeSolucao();
 
-        for(int i = 0; i < 500; i++){
-            listaCandidatos->removeTudo();
-            GrafoL* solucao = new GrafoL();
             p = primeiro;
 
             while(p != NULL){
-
-                if(!verificaSeEhTerminal(p, terminais, tam))
-                    listaCandidatos->insereVertice(p->getId(), 0);
-
+                if(!p->veSeEhTerminal())
+                    listaCandidatos2->insereVertice(p->getId(), 0);
                 p = p->getProx();
             }
 
-            solucao = subgrafoInduzido(terminais, tam);
+            atribuiRank(listaCandidatos, terminais, tam, maximo, minimo);
+            ordenaListaDeCandidatos(listaCandidatos, 0, listaCandidatos2->getTamanho());
 
-            atribuiRank(listaCandidatos, terminais, tam);
-            ordenaListaDeCandidatos(listaCandidatos,0 ,listaCandidatos->getTamanho());
-            int cont = 0;
-            while(solucao->numComponentesConexas() != 1 && cont < listaCandidatos->getTamanho()){
-
-                intervalo = (int)(alfa*listaCandidatos->getTamanho());
-
+            while(x != 1){
+                intervalo = (int)(alfa*listaCandidatos2->getTamanho());
                 if(intervalo == 0)
                     posicaoSorteada = 0;
                     else
                         posicaoSorteada = rand() % intervalo;
 
+                z = buscaVertice(listaCandidatos2->getPosicaoEscolhida(posicaoSorteada)->getId());
 
-                Vertice* z = buscaVertice(listaCandidatos->getPosicaoEscolhida(posicaoSorteada)->getId());
-                cont++;
                 if(z != NULL){
                     adj = z->getArestas();
 
-                    solucao->insereVertice(z->getId());
+                    solucaoAtual->insereVertice(z->getId());
 
                     while(adj != NULL){
-                        solucao->insereVertice(adj->getId());
-                        solucao->insereAresta(z->getId(), adj->getId(), adj->getPeso());
+
+                        solucaoAtual->insereVertice(adj->getId());
+                        solucaoAtual->insereAresta(z->getId(), adj->getId(), adj->getPeso());
                         adj = adj->getProx();
                     }
 
-                    //listaCandidatos->removeVerticeDaPosicao(posicaoSorteada);
+                    x = solucaoAtual->numComponentesConexas(solucaoAtual->getNumVertices());
+                    listaCandidatos2->removeVerticeDaPosicao(posicaoSorteada);
 
                 }else
-                        break;
+                    break;
+
             }
 
-                if(solucao->numComponentesConexas() == 1){
-                    //fprintf(arq, "SOLUCAO: %d\n", i);
-                    solucao = solucao->kruskal();
-                    solucao->podaGrafo(terminais, tam);
-                    //solucao->imprimeArestas(arq);
-                    //fprintf(arq, "NUM DE VERTICES : %d\n", solucao->getNumVertices());
-                    //fprintf(arq, "NUM DE ARESTAS : %d\n", solucao->getNumArestas());
-                    //fprintf(arq, "PESO DA ARVORE : %.2f\n", solucao->pesoDaArvore());
-                }else
-                    fprintf(arq, "Nao ha solucao, nao eh possivel criar uma arvore ligando os terminais !\n");
+            if(x == 1){
+                GrafoL* solucaoAux = new GrafoL();
+                fprintf(arq, "SOLUCAO : %d\n", j);
+                solucaoAux = solucaoAtual->kruskal();
+                solucaoAux->podaGrafo(terminais, tam);
+                //solucaoAtual->imprimeArestas(arq);
+                //fprintf(arq, "NUM DE VERTICES : %d\n", solucaoAux->getNumVertices());
+                //fprintf(arq, "NUM DE ARESTAS : %d\n", solucaoAux->getNumArestas());
+                //fprintf(arq, "PESO DA ARVORE DE STEINER : %.2f\n", solucaoAux->pesoDaArvore());
+                delete solucaoAux;
+            }else
+                fprintf(arq, "Nao ha solucao, nao eh possivel criar uma arvore ligando os terminais !\n");
 
-                if(solucao->pesoDaArvore() < pesoDaMelhorSolucao){
-                    pesoDaMelhorSolucao = solucao->pesoDaArvore();
-                    melhorSolucao = solucao;
-                }
 
-                delete solucao;
+            if(solucaoAtual->pesoDaArvore() < pesoDaMelhorSolucao){
+                pesoDaMelhorSolucao = solucaoAtual->pesoDaArvore();
+                numVerticesMelhorSolucao = solucaoAtual->numVertices;
+                numArestasMelhorSolucao = solucaoAtual->numArestas;
+            }
+
+            delete solucaoAtual;
+            delete listaCandidatos2;
         }
     }else{
-        GrafoL* solucao = new GrafoL();
-        solucao = kruskal();
-        melhorSolucao = solucao;
-        delete solucao;
+        GrafoL* solucaoAtual = new GrafoL();
+        solucaoAtual = kruskal();
+        pesoDaMelhorSolucao = solucaoAtual->pesoDaArvore();
+        numVerticesMelhorSolucao = solucaoAtual->numVertices;
+        numArestasMelhorSolucao = solucaoAtual->numArestas;
+        delete solucaoAtual;
     }
-    fprintf(arq, "MELHOR SOLUCAO:\n");
-    melhorSolucao->imprimeArestas(arq);
-    fprintf(arq, "NUM DE VERTICES : %d\n", melhorSolucao->getNumVertices());
-    fprintf(arq, "NUM DE ARESTAS : %d\n", melhorSolucao->getNumArestas());
-    fprintf(arq, "PESO DA ARVORE : %.2f\n", melhorSolucao->pesoDaArvore());
-    delete [] terminais;
-    delete melhorSolucao;
 
-}*/
+    fprintf(arq, "MELHOR SOLUCAO :\n");
+    fprintf(arq, "NUM DE VERTICES : %d\n", numVerticesMelhorSolucao);
+    fprintf(arq, "NUM DE ARESTAS : %d\n",  numArestasMelhorSolucao);
+    fprintf(arq, "PESO DA ARVORE DE STEINER : %.2f",  pesoDaMelhorSolucao);
+
+    delete solucaoAtual;
+    delete [] terminais;
+    delete  listaCandidatos;
+}
 
 int GrafoL::numComponentesConexas(int tam){
 
@@ -1859,7 +1861,7 @@ void GrafoL::atribuiRank(ListaVerticeSolucao* listaDeCandidatos, int* terminais,
 
     while(p != NULL){
 
-        if(!verificaSeEhTerminal(p, terminais, tam) && p->getDegree() != 0){
+        if(!p->veSeEhTerminal() && p->getDegree() != 0){
 
             float soma = 0;
             a = p->getArestas();
@@ -2083,13 +2085,15 @@ int GrafoL::retornaIndiceDaMenorEstimativa(int* distancias, int* abertos, int ta
 
 int GrafoL::numTerminais(){
 
-    Vertice*p = primeiro;
+    Vertice* p = primeiro;
+
     int cont = 0;
     while(p != NULL){
         if(p->veSeEhTerminal())
             cont++;
         p = p->getProx();
     }
+
     return cont;
 }
 

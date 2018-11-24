@@ -14,7 +14,6 @@ private:
     int inDegree;
     int outDegree;
     bool ehTerminal;
-    bool marcado;
 
 public:
     Vertice();
@@ -30,8 +29,6 @@ public:
     void decreaseOutDegree();
     int getId();
     void setId(int id);
-    bool getMarcado();
-    void marcar();
     Vertice* getProx();
     void setProx(Vertice *p);
     Aresta* getArestas(); //retorna a cabeça da lista
