@@ -114,7 +114,7 @@ int GrafoL::retornaIndice(int* vet, int tam, int id, GrafoL* newGrafo){
     return -1;
 }
 
-int GrafoL::retornaVerticeDoVetor(int i){
+int GrafoL::retornaVerticeDoVetor(int i){//Passado o indice como parâmetro, retorna o vertice correspondente
 
     int* gabarito = new int[numVertices];
     Vertice* p = primeiro;
@@ -132,7 +132,7 @@ int GrafoL::retornaVerticeDoVetor(int i){
             return aux;
         }
     delete [] gabarito;
-
+    return -1;
     free(p);
 }
 
@@ -154,6 +154,7 @@ int GrafoL::retornaVerticeDoVetor(int i, GrafoL* newGrafo){
             return aux;
         }
     delete [] gabarito;
+    return -1;
 }
 
 int GrafoL::getNumVertices(){
@@ -242,27 +243,6 @@ void GrafoL::insereVertice(int id){
     }
 }
 
-void GrafoL::insereVertice2(int id){
-
-    Vertice *t = primeiro;
-
-        Vertice *p = new Vertice();
-        p->setId(id);
-        if(t == NULL){
-            primeiro = p;
-            p->setProx(NULL);
-            }else{
-                while(t->getProx() != NULL)
-                    t = t->getProx();
-                    t->setProx(p);
-                    p->setProx(NULL);
-            }
-
-        numVertices++;
-}
-
-
-
 void GrafoL::insereAresta(int vert1, int vert2){
 
     if(!ehDirecionado){
@@ -317,27 +297,6 @@ void GrafoL::insereAresta(int vert1, int vert2, int peso){
             cout << "Nao eh possivel inserir uma aresta em um grafo direcionado, apenas um arco !" << endl;
 }
 
-void GrafoL::insereAresta2(int vert1, int vert2, int peso){
-
-
-        Vertice* p = buscaVertice(vert1);
-        Vertice* t = buscaVertice(vert2);
-
-        if(vert1 == vert2){}
-            //cout << "Nao eh possivel criar self-loops ! vertices (" << vert1 << "," << vert2 << ")" << endl;
-            else{
-                if(p != NULL && t != NULL){
-                    p->insereAresta(vert2, peso);
-                    t->insereAresta(vert1, peso);
-                    p->increaseDegree();
-                    t->increaseDegree();
-                    numArestas++;
-                    }//else
-                        //cout << "\nVertices nao encontrados !" << endl;
-            }
-
-}
-
 void GrafoL::insereArco(int vert1, int vert2){//(tail, head)
 
     if(ehDirecionado){
@@ -386,39 +345,6 @@ void GrafoL::insereArco(int vert1, int vert2, int peso){//(tail, head, peso)
     }else
         cout << "Nao eh possivel inserir uma arco em um grafo nao direcionado, apenas uma aresta !" << endl;
 }
-
-void GrafoL::retiraVertice2(int vert){
-
-    Vertice* p = primeiro;
-    Vertice* aux = NULL;
-
-    if(p == NULL || buscaVertice(vert) == NULL){
-        cout << "Vertice inexistente ! " << endl;
-    }
-        else{
-
-            while(p != NULL){
-                if(p->getId() == vert)
-                    break;
-                aux = p;
-                p = p->getProx();
-            }
-
-            if(aux == NULL){
-                primeiro = primeiro->getProx();
-                delete p;
-                numVertices--;
-            }else{
-                aux->setProx(p->getProx());
-                delete p;
-                numVertices--;
-            }
-        }
-
-    free(p);
-    free(aux);
-}
-
 
 void GrafoL::retiraVertice(int vert){
 
@@ -548,7 +474,7 @@ int GrafoL::getVerticeOutDegree(int id){
     }
 }
 
-void GrafoL::sequenciaDeGraus(FILE* arq){//Duvida no destrutor do vetor ,aonde tenho q deletar
+void GrafoL::sequenciaDeGraus(FILE* arq){
 
     Vertice*p = primeiro;
     int* vetorGraus = new int[numVertices];
@@ -575,22 +501,23 @@ void GrafoL::sequenciaDeGraus(FILE* arq){//Duvida no destrutor do vetor ,aonde t
 
             fprintf(arq, ">\n");
         }
+
     delete [] vetorGraus;
 }
 
 int GrafoL::grauDoGrafo(){
 
-    int aux;
+    int maior;
     Vertice*p = primeiro;
 
     if(p != NULL){
-        aux = p->getDegree();
+        maior = p->getDegree();
         while(p != NULL){
-            if(p->getDegree() >= aux)
-                aux = p->getDegree();
+            if(p->getDegree() >= maior)
+                maior = p->getDegree();
             p = p->getProx();
         }
-        return aux;
+        return maior;
     }else
         return -1;
 }
@@ -602,13 +529,14 @@ int GrafoL::ordemDoGrafo(){
 void GrafoL::vizinhancaAberta(int id, FILE* arq){
 
     Vertice*p = buscaVertice(id);
+    Aresta* adj;
 
     if(p != NULL){
-        Aresta* aux = p->getArestas();
+        adj = p->getArestas();
         fprintf(arq, " Vizinhanca aberta de (%d) = < %d, = ", id, id);
-        while(aux != NULL){
-            fprintf(arq, " %d, ", aux->getId());
-            aux = aux->getProx();
+        while(adj != NULL){
+            fprintf(arq, " %d, ", adj->getId());
+            adj = adj->getProx();
         }
         fprintf(arq, " >\n ");
     }else
@@ -618,13 +546,14 @@ void GrafoL::vizinhancaAberta(int id, FILE* arq){
 void GrafoL::vizinhancaFechada(int id, FILE* arq){
 
     Vertice*p = buscaVertice(id);
+    Aresta* adj;
 
     if(p != NULL){
-        Aresta* aux = p->getArestas();
+        adj = p->getArestas();
         fprintf(arq, " Vizinhanca fechada de (%d) = < %d, = ", id, id);
-        while(aux != NULL){
-            fprintf(arq, " %d, ", aux->getId());
-            aux = aux->getProx();
+        while(adj != NULL){
+            fprintf(arq, " %d, ", adj->getId());
+            adj = adj->getProx();
         }
         fprintf(arq, " >\n ");
     }else
@@ -638,7 +567,7 @@ bool GrafoL::ehCompleto(){//verifica se todos os vertices possuem grau n-1,sendo
 
     if(p != NULL){
         while(p->getProx() != NULL){
-            if(p->getDegree() == p->getProx()->getDegree() && p->getDegree()== (numVertices)-1)
+            if(p->getDegree() == p->getProx()->getDegree() && p->getDegree() == (numVertices)-1)
                 cont++;
             p = p->getProx();
         }
@@ -651,20 +580,20 @@ bool GrafoL::ehCompleto(){//verifica se todos os vertices possuem grau n-1,sendo
             return false;
 }
 
-bool GrafoL::ehbipartido(){//Duvida em relacao ao vetor
+bool GrafoL::ehbipartido(){
 
     Vertice* p = primeiro;
-    int vetorDeCores[10000];
+    int vetorDeCores[numVertices];
 
-    while(p != NULL){
-        vetorDeCores[p->getId()] = 0;
+    while(p != NULL){//Preenche o vetor de cores
+        vetorDeCores[retornaIndice(p->getId())] = 0;
         p = p->getProx();
     }
 
     p = primeiro;
 
     while(p != NULL){
-        if(vetorDeCores[p->getId()] == 0)
+        if(vetorDeCores[retornaIndice(p->getId())] == 0)//Enquanto nao estiverem todos com alguma cor
             if(auxEhBipartido(p, vetorDeCores, 0) == false)
                     return false;
         p = p->getProx();
@@ -676,23 +605,24 @@ bool GrafoL::ehbipartido(){//Duvida em relacao ao vetor
 
 bool GrafoL::auxEhBipartido(Vertice* p, int* vetorDeCores, int cor){
 
-
+    //Colore
     if(cor == 0)
-        vetorDeCores[p->getId()] = 1;
+        vetorDeCores[retornaIndice(p->getId())] = 1;
 
     if(cor == 1)
-        vetorDeCores[p->getId()] = 2;
+        vetorDeCores[retornaIndice(p->getId())] = 2;
         else
-            vetorDeCores[p->getId()] = 1;
+            vetorDeCores[retornaIndice(p->getId())] = 1;
 
     Aresta* a = p->getArestas();
 
+    //Usa recursividade para ir colorindo o resto, se conseguir colorir as adjacencias de todos os vertices com cores diferentes do a deles proprios retorna true
     while(a != NULL){
-        if(a != NULL && vetorDeCores[a->getId()] == 0){
-            if(auxEhBipartido(buscaVertice(a->getId()), vetorDeCores, vetorDeCores[p->getId()]) == false)
+        if(a != NULL && vetorDeCores[retornaIndice(a->getId())] == 0){
+            if(auxEhBipartido(buscaVertice(a->getId()), vetorDeCores, vetorDeCores[retornaIndice(p->getId())]) == false)
                 return false;
         }else
-            if(vetorDeCores[a->getId()] == vetorDeCores[p->getId()])
+            if(vetorDeCores[retornaIndice(a->getId())] == vetorDeCores[retornaIndice(p->getId())])
                 return false;
 
         a = a->getProx();
@@ -701,7 +631,7 @@ bool GrafoL::auxEhBipartido(Vertice* p, int* vetorDeCores, int cor){
     return true;
 }
 
-void GrafoL::deepFirstSearch(FILE* arq){//Duvida em relacao ao vetor
+void GrafoL::deepFirstSearch(FILE* arq){
 
     Vertice* p = primeiro;
     int* vetorDeMarcacao = new int[numVertices];
@@ -750,16 +680,16 @@ void GrafoL::dfs(Vertice* p, int* vetorDeMarcacao){
 }
 
 
-void GrafoL::breadthFirstSearch(){
+void GrafoL::breadthFirstSearch(){//Usa a alocacao em uma fila para fazer a busca em largura
 
     Fila fila;
 
     Vertice* p = primeiro;
 
-    int vetorDeMarcacao[10000];
+    int vetorDeMarcacao[numVertices];
 
     while(p != NULL){
-        vetorDeMarcacao[p->getId()] = 0;
+        vetorDeMarcacao[retornaIndice(p->getId())] = 0;
         p = p->getProx();
     }
 
@@ -767,13 +697,16 @@ void GrafoL::breadthFirstSearch(){
 
     fila.enfileira(primeiro->getId());
 
+    Vertice* v;
+    Aresta* a;
+
     while(!fila.vazia()){
-        Vertice* v = buscaVertice(fila.desenfileira());
-        Aresta* a = v->getArestas();
+        v = buscaVertice(fila.desenfileira());
+        a = v->getArestas();
         cout << v->getId() << ",";
         while(a != NULL){
-            if(vetorDeMarcacao[a->getId()] == 0){
-                vetorDeMarcacao[a->getId()] = 1;
+            if(vetorDeMarcacao[retornaIndice(a->getId())] == 0){
+                vetorDeMarcacao[retornaIndice(a->getId())] = 1;
                 fila.enfileira(a->getId());
             }
 
@@ -782,13 +715,13 @@ void GrafoL::breadthFirstSearch(){
     }
 }
 
-int GrafoL::kRegularidade(){//verifica se cada vertice tem grau igual ao do seu proximo
+void GrafoL::kRegularidade(FILE* arq){//verifica se cada vertice tem grau igual ao do seu proximo
 
     int cont = 1;
     Vertice* p = primeiro;
 
     if(ehCompleto())
-        return p->getDegree();
+        fprintf(arq, "Grafo eh %d-Regular\n", p->getDegree());
         else{
             while(p->getProx() != NULL){
                 if(p->getDegree() == p->getProx()->getDegree())
@@ -798,18 +731,17 @@ int GrafoL::kRegularidade(){//verifica se cada vertice tem grau igual ao do seu 
         }
 
     if(cont == numVertices)
-        return primeiro->getDegree();
-        else{
-            cout << "Grafo nao Regular !" << endl;
-            return -1;
-        }
+        fprintf(arq, "Grafo eh %d-Regular\n", p->getDegree());
+        else
+            fprintf(arq, "Grafo nao regular !\n");
+
 }
 
 void GrafoL::fechoTransitivoDireto(int vert, FILE* arq){//utiliza a busca em profundidade para achar o fecho transitivo direto
 
     if(ehDirecionado){
         Vertice* v = buscaVertice(vert);
-        int vetorDeMarcacao[10000];
+        int vetorDeMarcacao[numVertices];
 
         if(v != NULL){
             dfs(v, vetorDeMarcacao, arq);
@@ -819,17 +751,17 @@ void GrafoL::fechoTransitivoDireto(int vert, FILE* arq){//utiliza a busca em pro
         fprintf(arq, "Nao ha fecho transitivo direto para um vertice em um grafo nao direcionado !\n");
 }
 
-void GrafoL::fechoTransitivoIndireto(int vert, FILE* arq){
+void GrafoL::fechoTransitivoIndireto(int vert, FILE* arq){//Usa fila para achar o fecho transitivo Indireto
 
     Fila fila;
 
     Vertice* p = primeiro;
     Aresta* a;
     int chave = vert;
-    int vetorDeMarcacao[10000];
+    int vetorDeMarcacao[numVertices];
 
     while(p != NULL){
-        vetorDeMarcacao[p->getId()] = 0;
+        vetorDeMarcacao[retornaIndice(p->getId())] = 0;
         p = p->getProx();
     }
 
@@ -839,17 +771,17 @@ void GrafoL::fechoTransitivoIndireto(int vert, FILE* arq){
 
     while(!fila.vazia()){
 
-        vetorDeMarcacao[fila.getInicio()] = 1;
+        vetorDeMarcacao[retornaIndice(fila.getInicio())] = 1;
         fprintf(arq, "%d, ", fila.desenfileira());
         while(p != NULL){
-            if(vetorDeMarcacao[p->getId()] == 0){
+            if(vetorDeMarcacao[retornaIndice(p->getId())] == 0){
                 a = p->getArestas();
 
                 while(a != NULL){
                     if(a->getId() == chave){
                         fila.enfileira(p->getId());
                         chave = p->getId();
-                        vetorDeMarcacao[p->getId()] = 1;
+                        vetorDeMarcacao[retornaIndice(p->getId())] = 1;
                         break;
                     }
                     a = a->getProx();
@@ -861,21 +793,7 @@ void GrafoL::fechoTransitivoIndireto(int vert, FILE* arq){
     }
 }
 
-void GrafoL::imprimeVertices(){
-
-    Vertice *p = primeiro;
-
-    while(p != NULL){
-        cout << p->getId() << " ";
-        p = p->getProx();
-    }
-
-    cout << "\nQuantidade de Vertices : " << numVertices;
-
-    cout << endl;
-}
-
-void GrafoL::imprimeArestas(FILE* arq){
+void GrafoL::imprimeGrafo(FILE* arq){
 
     Vertice *p = primeiro;
     fprintf(arq, "LISTA DE ADJACENCIAS : \n");
@@ -948,15 +866,6 @@ GrafoL* GrafoL::subgrafoInduzido(int * vet, int tam){
             //cout << "Nao eh possivel inserir o vertice " << vet[i] << ", pois nao existe no grafo !" << endl;
     }
 
-
-    /*cout << "SUBGRAFO INDUZIDO PELOS VERTICES {";
-
-    for(int i = 0; i < tam; i++)
-        cout << vet[i] << ", ";
-
-    cout << "} " << endl;
-
-    grafo->imprimeArestas();*/
     return grafo;
 }
 
@@ -987,20 +896,9 @@ bool GrafoL::verificaSePodeSolucao(Vertice* p, int* vetorSolucao){
     return true;
 }
 
-bool GrafoL::verificaSeEhTerminal(Vertice* p, int* terminais, int tam){
 
-    int i = 0;
 
-    while(i < tam){
-        if(p->getId() == terminais[i])
-            return true;
-        i++;
-    }
-
-    return false;
-}
-
-GrafoL* GrafoL::kruskal(FILE* arq){
+void GrafoL::kruskal(FILE* arq){
 
     int numComponentesConexas = 0;
     Vertice* p = primeiro;
@@ -1011,11 +909,11 @@ GrafoL* GrafoL::kruskal(FILE* arq){
     ListaArestaSolucao* listaDeArestas = new ListaArestaSolucao();
 
     for(int i = 0; i < numVertices; i++)
-        arvores[i] = retornaVerticeDoVetor(i);
+        arvores[i] = retornaVerticeDoVetor(i);//Preenche o vetor com as arvores de cada vertice que no inicio serão todas diferentes
 
     if(numArestas != 0){
 
-        while(p != NULL){
+        while(p != NULL){//Coloca todas as arestas na lista
             a = p->getArestas();
 
             while(a != NULL){
@@ -1029,20 +927,20 @@ GrafoL* GrafoL::kruskal(FILE* arq){
             p = p->getProx();
         }
 
-        ordenaArestas(listaDeArestas, 0, numArestas, listaDeArestas->getTamanho());
+        ordenaArestas(listaDeArestas, 0, numArestas, listaDeArestas->getTamanho());//Ordena as arestas em ordem crescente
 
         ArestaSolucao* t = listaDeArestas->getPrimeiro();
 
         int cont = 0;
-        while(t != NULL && cont < (numVertices-1) && !listaDeArestas->vazia()){
+        while(t != NULL && cont < (numVertices-1) && !listaDeArestas->vazia()){//Enquanto a lista nao estiver vazia
 
             int arvore1;
             int arvore2;
 
-            arvore1 = buscaArvore(t->getVertice1(), arvores);
+            arvore1 = buscaArvore(t->getVertice1(), arvores);//Pega as arvores dos vertices
             arvore2 = buscaArvore(t->getVertice2(), arvores);
 
-            if (arvore1 != arvore2) {
+            if (arvore1 != arvore2) {//Se forem diferentes, deixa elas iguais
                 uneArvores(arvore1, arvore2, arvores);
                 grafoSolucao->insereVertice(t->getVertice1());
                 grafoSolucao->insereVertice(t->getVertice2());
@@ -1056,14 +954,14 @@ GrafoL* GrafoL::kruskal(FILE* arq){
 
         p = primeiro;
 
-        while(p != NULL){
+        while(p != NULL){//Se algum vertice tiver grau 0, coloca ele na solucao
             if(p->getDegree() == 0)
                 grafoSolucao->insereVertice(p->getId());
             p = p->getProx();
         }
 
 
-        for(p = primeiro; p != NULL;p = p->getProx()){
+        for(p = primeiro; p != NULL;p = p->getProx()){//Conta o numero de componentes conexas segundo o vetor que corresponde as arvores de cada vertice
             int id = p->getId();
             for(int i = 0; i < numVertices;i++){
                 if(id == arvores[i]){
@@ -1076,7 +974,7 @@ GrafoL* GrafoL::kruskal(FILE* arq){
 
 
         //cout << "ARVORE GERADORA MINIMAL (KRUSKAL)" << endl;
-        grafoSolucao->imprimeArestas(arq);
+        grafoSolucao->imprimeGrafo(arq);
         //cout << "NUM DE COMP CONEXAS " << numComponentesConexas << endl;
         fprintf(arq, "NUM DE VERTICES : %d\n", grafoSolucao->getNumVertices());
         fprintf(arq, "NUM DE ARESTAS : %d\n", grafoSolucao->getNumArestas());
@@ -1093,9 +991,9 @@ GrafoL* GrafoL::kruskal(FILE* arq){
 
         numComponentesConexas = numVertices;
 
-        //cout << "ARVORE GERADORA MINIMAL (KRUSKAL)" << endl;
-        //grafoSolucao->imprimeArestas(arq);
-        //cout << "NUM DE COMP CONEXAS " << numComponentesConexas << endl;
+        fprintf(arq, "NUM DE VERTICES : %d\n", grafoSolucao->getNumVertices());
+        fprintf(arq, "NUM DE ARESTAS : %d\n", grafoSolucao->getNumArestas());
+        fprintf(arq, "PESO DA ARVORE  : %f\n", grafoSolucao->pesoDaArvore());
         delete grafoSolucao;
         delete [] arvores;
         delete listaDeArestas;
@@ -1158,9 +1056,9 @@ void GrafoL::prim(FILE* arq, int noPartida){
             numVisitados++;
         }
 
-        grafoAux->imprimeArestas(arq);
+        grafoAux->imprimeGrafo(arq);
     } while(numVisitados <= grafoAux->numVertices);
-    Prim->imprimeArestas(arq);
+    Prim->imprimeGrafo(arq);
 }
 
 GrafoL* GrafoL::kruskal(){
@@ -1422,17 +1320,6 @@ bool GrafoL::veSeJaTemArestaSolucao(ListaArestaSolucao* listaDeArestas, int id, 
     return false;
 }
 
-void GrafoL::teste(FILE* arq){
-
-    Vertice* p = primeiro;
-    GrafoL* solucao;
-    Aresta*a;
-
-    solucao = copiaGrafo();
-
-    delete solucao;
-}
-
 void GrafoL::removeTudo(){
 
     Vertice* p = primeiro;
@@ -1457,8 +1344,6 @@ void GrafoL::removeTudo(){
 
 
 void GrafoL::steinerGuloso(FILE* arq){
-    time_t inicio, fim;
-    inicio = time(NULL);
 
     Vertice* p = primeiro;
     GrafoL* solucao;
@@ -1471,7 +1356,7 @@ void GrafoL::steinerGuloso(FILE* arq){
 
 
     int i = 0;
-    while(p != NULL){
+    while(p != NULL){//Preenche o vetor de terminais e a lista de candidatos
         if(p->veSeEhTerminal()){
             terminais[i] = p->getId();
             i++;
@@ -1481,22 +1366,18 @@ void GrafoL::steinerGuloso(FILE* arq){
         p = p->getProx();
     }
 
-    solucao = subgrafoInduzido(terminais, tam);
-    cout << "ACABOU O SUBGRAFO INDUZIDO" << endl;
+    solucao = subgrafoInduzido(terminais, tam);//A solucao a principio é o subgrafo induzido pelos vertices
 
     achaMaximoMinimo(&maximo, &minimo);
-    atribuiRank(listaCandidatos, terminais, tam, maximo, minimo);
-    ordenaListaDeCandidatos(listaCandidatos,0 ,listaCandidatos->getTamanho());
-
-    cout << "ACABOU DE ORDENAR" << endl;
+    atribuiRank(listaCandidatos, terminais, tam, maximo, minimo);//Atribui o rank aos vertices candidatos segundo a função criterio
+    ordenaListaDeCandidatos(listaCandidatos,0 ,listaCandidatos->getTamanho());//Ordena a lista de candidatos de forma crescente em relação ao rank
 
     Aresta* adj;
     Vertice* z;
 
-    int cont = 0;
-    int x = solucao->numComponentesConexas(solucao->getNumVertices());
+    int numCompConexas = solucao->numComponentesConexas(solucao->getNumVertices());
 
-    while(x != 1 && !listaCandidatos->vazia()){
+    while(numCompConexas != 1 && !listaCandidatos->vazia()){//Enquanto o grafo nao for conexo, adiciona um vertice da lista
 
         z = buscaVertice(listaCandidatos->getPrimeiro()->getId());
 
@@ -1512,17 +1393,17 @@ void GrafoL::steinerGuloso(FILE* arq){
                 adj = adj->getProx();
             }
 
-            x = solucao->numComponentesConexas(solucao->getNumVertices());
+            numCompConexas = solucao->numComponentesConexas(solucao->getNumVertices());
 
             listaCandidatos->removeVertice();
         }else
             break;
     }
 
-    if(x == 1){
+    if(numCompConexas == 1){//Depois faz a AGM segundo o algoritmo de Kruskal
         solucao = solucao->kruskal();
-        solucao->podaGrafo(terminais, tam);
-        solucao->imprimeArestas(arq);
+        solucao->podaGrafo(terminais, tam);//Elimina os vertices do grafo que nao sao terminais e tem grau 1
+        solucao->imprimeGrafo(arq);
         fprintf(arq, "NUM DE VERTICES : %d\n", solucao->getNumVertices());
         fprintf(arq, "NUM DE ARESTAS : %d\n", solucao->getNumArestas());
         fprintf(arq, "PESO DA ARVORE DE STEINER : %f", solucao->pesoDaArvore());
@@ -1532,9 +1413,6 @@ void GrafoL::steinerGuloso(FILE* arq){
     delete solucao;
     delete listaCandidatos;
     delete [] terminais;
-
-    fim = time(NULL);
-    cout << "TEMPO: " << fim - inicio << endl;
 }
 
 void GrafoL::steinerGuloso(FILE* arq, ListaVerticeSolucao* listaCandidatos, int* terminais, int tam, float* pesoDaMelhorSolucao, int* numArestasDaMelhorSolucao, int* numVerticesDaMelhorSolucao){
@@ -1586,20 +1464,6 @@ void GrafoL::steinerGuloso(FILE* arq, ListaVerticeSolucao* listaCandidatos, int*
     delete solucao;
 }
 
-/*
-
-int intervalo = 0;
-int posicaoSorteada;
-srand(time(NULL));
-
-intervalo = (int)(alfa*listaCandidatos->getTamanho());
-
-                if(intervalo == 0)
-                    posicaoSorteada = 0;
-                    else
-                        posicaoSorteada = rand() % intervalo;*/
-
-
 void GrafoL::steinerGulosoRandomizado(FILE* arq, float alfa, int k){
 
     Vertice* p = primeiro;
@@ -1617,7 +1481,7 @@ void GrafoL::steinerGulosoRandomizado(FILE* arq, float alfa, int k){
     int minimo;
 
     int i = 0;
-    while(p != NULL){
+    while(p != NULL){//Preenche o vetor de terminais e a lista de candidatos
         if(p->veSeEhTerminal()){
             terminais[i] = p->getId();
             i++;
@@ -1628,14 +1492,10 @@ void GrafoL::steinerGulosoRandomizado(FILE* arq, float alfa, int k){
     }
 
     achaMaximoMinimo(&maximo, &minimo);
-    atribuiRank(listaCandidatos, terminais, tam, maximo, minimo);
-    ordenaListaDeCandidatos(listaCandidatos, 0, listaCandidatos->getTamanho());
+    atribuiRank(listaCandidatos, terminais, tam, maximo, minimo);//Atribui o rank aos vertices candidatos segundo a função criterio
+    ordenaListaDeCandidatos(listaCandidatos, 0, listaCandidatos->getTamanho());//Ordena a lista de candidatos de forma crescente em relação ao rank
 
-    steinerGuloso(arq, listaCandidatos, terminais, tam, &pesoDaMelhorSolucao, &numArestasMelhorSolucao, &numVerticesMelhorSolucao);
-
-    fprintf(arq, "NUM DE VERTICES : %d\n", numVerticesMelhorSolucao);
-    fprintf(arq, "NUM DE ARESTAS : %d\n",  numArestasMelhorSolucao);
-    fprintf(arq, "PESO DA ARVORE DE STEINER : %.2f",  pesoDaMelhorSolucao);
+    steinerGuloso(arq, listaCandidatos, terminais, tam, &pesoDaMelhorSolucao, &numArestasMelhorSolucao, &numVerticesMelhorSolucao);//Coloca como melhor solucao a solucao gerada pelo guloso
 
     Vertice* z;
     Aresta* adj;
@@ -1643,22 +1503,20 @@ void GrafoL::steinerGulosoRandomizado(FILE* arq, float alfa, int k){
     int intervalo = 0;
     int posicaoSorteada;
     srand(time(NULL));
-    int x;
+    int numCompConexas;
 
-    solucaoAtual = subgrafoInduzido(terminais, tam);
-    x = solucaoAtual->numComponentesConexas(tam);
 
     if(!listaCandidatos->vazia()){
-        for(int j = 0; j < 10; j++){
+        for(int j = 0; j < k; j++){//Enquanto for menor que o numero de iterações passadas por parametro, cria k solucoes.
 
             solucaoAtual = subgrafoInduzido(terminais, tam);
-            x = solucaoAtual->numComponentesConexas(tam);
+            numCompConexas = solucaoAtual->numComponentesConexas(tam);
 
             ListaVerticeSolucao* listaCandidatos2 = new ListaVerticeSolucao();
 
             p = primeiro;
 
-            while(p != NULL){
+            while(p != NULL){//Copia da lista de candidatos
                 if(!p->veSeEhTerminal())
                     listaCandidatos2->insereVertice(p->getId(), 0);
                 p = p->getProx();
@@ -1667,8 +1525,9 @@ void GrafoL::steinerGulosoRandomizado(FILE* arq, float alfa, int k){
             atribuiRank(listaCandidatos, terminais, tam, maximo, minimo);
             ordenaListaDeCandidatos(listaCandidatos, 0, listaCandidatos2->getTamanho());
 
-            while(x != 1){
-                intervalo = (int)(alfa*listaCandidatos2->getTamanho());
+            while(numCompConexas != 1){
+
+                intervalo = (int)(alfa*listaCandidatos2->getTamanho());//Sortea um numero entre a primeira posicao da lista e o alfa passado por parametro
                 if(intervalo == 0)
                     posicaoSorteada = 0;
                     else
@@ -1688,7 +1547,7 @@ void GrafoL::steinerGulosoRandomizado(FILE* arq, float alfa, int k){
                         adj = adj->getProx();
                     }
 
-                    x = solucaoAtual->numComponentesConexas(solucaoAtual->getNumVertices());
+                    numCompConexas = solucaoAtual->numComponentesConexas(solucaoAtual->getNumVertices());
                     listaCandidatos2->removeVerticeDaPosicao(posicaoSorteada);
 
                 }else
@@ -1696,21 +1555,18 @@ void GrafoL::steinerGulosoRandomizado(FILE* arq, float alfa, int k){
 
             }
 
-            if(x == 1){
+            if(numCompConexas == 1){
                 GrafoL* solucaoAux = new GrafoL();
                 fprintf(arq, "SOLUCAO : %d\n", j);
                 solucaoAux = solucaoAtual->kruskal();
                 solucaoAux->podaGrafo(terminais, tam);
-                //solucaoAtual->imprimeArestas(arq);
-                //fprintf(arq, "NUM DE VERTICES : %d\n", solucaoAux->getNumVertices());
-                //fprintf(arq, "NUM DE ARESTAS : %d\n", solucaoAux->getNumArestas());
-                //fprintf(arq, "PESO DA ARVORE DE STEINER : %.2f\n", solucaoAux->pesoDaArvore());
+
                 delete solucaoAux;
             }else
                 fprintf(arq, "Nao ha solucao, nao eh possivel criar uma arvore ligando os terminais !\n");
 
 
-            if(solucaoAtual->pesoDaArvore() < pesoDaMelhorSolucao){
+            if(solucaoAtual->pesoDaArvore() < pesoDaMelhorSolucao){//Ve se a solucao atual é melhor que a atual melhor solucao segundo a função objetivo
                 pesoDaMelhorSolucao = solucaoAtual->pesoDaArvore();
                 numVerticesMelhorSolucao = solucaoAtual->numVertices;
                 numArestasMelhorSolucao = solucaoAtual->numArestas;
@@ -1738,7 +1594,7 @@ void GrafoL::steinerGulosoRandomizado(FILE* arq, float alfa, int k){
     delete  listaCandidatos;
 }
 
-int GrafoL::numComponentesConexas(int tam){
+int GrafoL::numComponentesConexas(int tam){//Conta o numero de componentes conexas utilizando busca em profundidade
 
     Vertice* p = primeiro;
     int vetorDeMarcacao[tam];
@@ -1758,7 +1614,6 @@ int GrafoL::numComponentesConexas(int tam){
         p = p->getProx();
     }
 
-    delete [] vetorDeMarcacao;
     return numComponentesConexas;
 }
 
@@ -1771,13 +1626,13 @@ bool GrafoL::todosMarcados(int* vetorDeMarcacao, int tam){
 
 }
 
-GrafoL* GrafoL::podaGrafo(int* terminais, int tam){
+void GrafoL::podaGrafo(int* terminais, int tam){
 
     Vertice* p = primeiro;
     Vertice* aux = NULL;
 
     while(p != NULL){
-        if(p->getDegree() == 1 && !verificaSeEhTerminal(p, terminais, tam)){
+        if(p->getDegree() == 1 && !p->veSeEhTerminal()){
             aux = p->getProx();
             retiraVertice(p->getId());
             p = aux;
@@ -1943,10 +1798,7 @@ void GrafoL::auxOrdenaListaCandidatos(VerticeSolucao* vetorAux, int inicio, int 
 
 float GrafoL::normaliza(float valor, int maximo, int minimo){//coloca o peso da aresta entre  1 e 10
 
-    Vertice *p = primeiro;
-    Aresta* a = p->getArestas();
     float x;
-
 
     x = ((valor - minimo)/(maximo - minimo))*10;
 
@@ -1973,7 +1825,7 @@ float GrafoL::pesoDaArvore(){
     return (float)(soma/2);
 }
 
-int* GrafoL::djisktra(int verticePartida, FILE* arq){
+void GrafoL::djisktra(int verticePartida, FILE* arq){
 
     int* vertices = new int[numVertices];
     int* distancias = new int[numVertices];
@@ -2010,7 +1862,7 @@ int* GrafoL::djisktra(int verticePartida, FILE* arq){
 
         IndiceVerticeComMenorEstimativa = retornaIndiceDaMenorEstimativa(distancias, abertos, numVertices);
 
-        if(abertos[IndiceVerticeComMenorEstimativa] = -1){
+        if(abertos[IndiceVerticeComMenorEstimativa] == -1){
 
             abertos[IndiceVerticeComMenorEstimativa] = 1;
 
@@ -2030,23 +1882,6 @@ int* GrafoL::djisktra(int verticePartida, FILE* arq){
         numVerticesAbertos--;
     }
 
-    /*cout << "VERTICES : ";
-    for(int i = 0;i < numVertices; i++)
-        cout << vertices[i] << ", ";
-
-    cout << "\nDISTANCIAS : ";
-    for(int i = 0;i < numVertices; i++)
-        cout << distancias[i] << ", ";
-
-    cout << "\nPREDECESSORES : ";
-    for(int i = 0;i < numVertices; i++)
-        cout << predecessores[i] << ", ";
-
-    cout << "\nABERTOS : ";
-    for(int i = 0;i < numVertices; i++)
-        cout << abertos[i] << ", ";
-
-    cout << numVerticesAbertos << endl;*/
 
     fprintf(arq, "DISTANCIAS MINIMAS DO VERTICE %d PARA O RESTANTE DOS VERTICES DO GRAFO :\n", verticePartida);
 

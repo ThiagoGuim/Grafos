@@ -1,6 +1,8 @@
 #ifndef ARESTASOLUCAO_H_INCLUDED
 #define ARESTASOLUCAO_H_INCLUDED
 
+
+///Classe criada para representar as arestas que entrarao na solucao do algoritmo de Kruskal
 class ArestaSolucao{
 
 private:

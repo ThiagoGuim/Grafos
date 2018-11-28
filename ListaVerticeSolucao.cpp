@@ -43,7 +43,7 @@ void ListaVerticeSolucao::insereVertice(int id, float rankk){
 }
 
 
-VerticeSolucao* ListaVerticeSolucao::removeVertice(){
+void ListaVerticeSolucao::removeVertice(){
 
     VerticeSolucao* p = primeiro;
 
@@ -99,7 +99,7 @@ int ListaVerticeSolucao::getTamanho(){
     return tamanho;
 }
 
-VerticeSolucao* ListaVerticeSolucao::removeVerticeDaPosicao(int posicao){
+void ListaVerticeSolucao::removeVerticeDaPosicao(int posicao){
 
     VerticeSolucao* p = primeiro;
     VerticeSolucao* aux = NULL;

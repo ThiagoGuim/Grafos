@@ -16,8 +16,8 @@ public:
 
     void insereVertice(int id, float rankk);
     void removeTudo();
-    VerticeSolucao* removeVertice();
-    VerticeSolucao* removeVerticeDaPosicao(int posicao);
+    void removeVertice();
+    void removeVerticeDaPosicao(int posicao);
     VerticeSolucao* getPrimeiro();
     VerticeSolucao* getPosicaoEscolhida(int posicao);
     bool vazia();

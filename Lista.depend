@@ -8,7 +8,7 @@
 1542519179 source:c:\devjogos\project\lista\arestasolucao.cpp
 	"ArestaSolucao.h"
 
-1542519179 c:\devjogos\project\lista\arestasolucao.h
+1543237188 c:\devjogos\project\lista\arestasolucao.h
 
 1538174840 source:c:\devjogos\project\lista\fila.cpp
 	<iostream>
@@ -31,24 +31,24 @@
 1542519179 c:\devjogos\project\lista\listaarestasolucao.h
 	"ArestaSolucao.h"
 
-1542825928 source:c:\devjogos\project\lista\listaverticesolucao.cpp
+1543237246 source:c:\devjogos\project\lista\listaverticesolucao.cpp
 	"VerticeSolucao.h"
 	"ListaVerticeSolucao.h"
 	<iostream>
 	<stdlib.h>
 
-1543075104 c:\devjogos\project\lista\verticesolucao.h
+1543237191 c:\devjogos\project\lista\verticesolucao.h
 
-1543024683 c:\devjogos\project\lista\listaverticesolucao.h
+1543237262 c:\devjogos\project\lista\listaverticesolucao.h
 	"VerticeSolucao.h"
 
-1543086860 source:c:\devjogos\project\lista\main.cpp
+1543240455 source:c:\devjogos\project\lista\main.cpp
 	<iostream>
 	<fstream>
 	<cstring>
 	"GrafoL.h"
 
-1543089639 c:\devjogos\project\lista\grafol.h
+1543240172 c:\devjogos\project\lista\grafol.h
 	"Vertice.h"
 	"VerticeSolucao.h"
 	"ArestaSolucao.h"
@@ -63,7 +63,7 @@
 	<iostream>
 	"VerticeSolucao.h"
 
-1543090117 source:c:\devjogos\project\lista\grafol.cpp
+1543240295 source:c:\devjogos\project\lista\grafol.cpp
 	"GrafoL.h"
 	"Fila.h"
 	"limits.h"

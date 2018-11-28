@@ -19,7 +19,7 @@ GrafoL* lerArquivo(char *nomeArq,GrafoL* grafo){
     char ch;
     int linhas = 1;
     char str;
-    int numVertices, vert1, vert2, peso,vertTerm;
+    int numVertices, vert1, vert2, peso;
     int flag = 0;
 
     arq = fopen(nomeArq, "r");
@@ -121,7 +121,7 @@ void chamaOpcaoDoMenu(int opcao, FILE* arq_saida, GrafoL* grafo){
 
     switch(opcao){
         case 0: {
-            cout << "Algoritmo Encerrado. Os dados foram armazenados em arquivo." << endl;
+            cout << "Os dados foram armazenados em arquivo." << endl;
             break;
 
         }
@@ -162,12 +162,9 @@ void chamaOpcaoDoMenu(int opcao, FILE* arq_saida, GrafoL* grafo){
             break;
         }
         case 4: {
-            int i = grafo->kRegularidade();
+            fprintf(arq_saida, "4- Mostrar a k-regularidade do Grafo\n K-regularidade\n");
+            grafo->kRegularidade(arq_saida);
 
-            if(i != -1)
-                fprintf(arq_saida, "4- Mostrar a k-regularidade do Grafo\n K-regularidade = Nao eh regular\n\n");
-                else
-                    fprintf(arq_saida, "4- Mostrar a k-regularidade do Grafo\n K-regularidade = %d\n\n", i);
             break;
         }
         case 5: {
@@ -209,7 +206,6 @@ void chamaOpcaoDoMenu(int opcao, FILE* arq_saida, GrafoL* grafo){
             break;
         }
         case 10:{
-            int vert;
             fprintf(arq_saida, "10- Apresentar sequencia de graus do Grafo\n");
             grafo->sequenciaDeGraus(arq_saida);
             break;
@@ -245,7 +241,7 @@ void chamaOpcaoDoMenu(int opcao, FILE* arq_saida, GrafoL* grafo){
         }
         case 14:{
             fprintf(arq_saida, "14- Apresentar uma Arvore geradora minima (Kruskal)\n");
-            grafo = grafo->kruskal(arq_saida);
+            grafo->kruskal(arq_saida);
             break;
         }
         case 15:{
@@ -264,7 +260,7 @@ void chamaOpcaoDoMenu(int opcao, FILE* arq_saida, GrafoL* grafo){
             break;
         }
         case 17:{
-            grafo->imprimeArestas(arq_saida);
+            grafo->imprimeGrafo(arq_saida);
             //cout << grafo->numComponentesConexas();
             break;
         }
@@ -283,7 +279,7 @@ void chamaOpcaoDoMenu(int opcao, FILE* arq_saida, GrafoL* grafo){
             break;
         }
         case 21:{
-            grafo->imprimeArestas(arq_saida);
+            grafo->imprimeGrafo(arq_saida);
             break;
         }
         default:{
@@ -329,21 +325,6 @@ int main(int argc, char *argv[])
     }else
         cout << "Nao foi possivel criar o grafo !";
 
-
-    //if(grafo != NULL){
-
-        //int terminais[14] = {797, 465, 968, 563, 209, 64, 241, 898, 771,835, 861, 102, 72, 321};
-        //int terminais[14] = {30, 180, 81, 116, 132, 196, 88, 17, 191, 161, 19, 201, 144, 178};
-        //int terminais[11] = {823, 886, 403, 156, 552, 402, 642, 124, 707, 525, 278};
-        //int terminais[14] = {4332, 7142, 2383, 3417, 7496, 7022, 4210, 1696, 622,6767, 2822, 3184, 980, 6131};
-        //int terminais[2] = {7, 6};
-        //int terminais[5] = {659, 309, 553, 935, 591};
-        //grafo->steinerGuloso(terminais, 14);
-        //grafo->kruskal();
-        //grafo->steinerGulosoRandomizado(terminais, 5, 0.3, 10);
-
-
-    //}
 
     return 0;
 }
